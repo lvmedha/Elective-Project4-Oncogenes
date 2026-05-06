@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# AlphaMissense data / model outputs (often large)
+data/
+*.tsv.gz
+*.fasta
+*.fa
+msa_output/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
