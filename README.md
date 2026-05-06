@@ -11,7 +11,7 @@ environment used in this project.
 ## Environment Setup (AlphaMissense)
 
 AlphaMissense is built for **Linux**. On Windows, use **WSL2 (Ubuntu)**.
-On macOS or native Linux, skip step 1.
+On macOS or native Linux, skip the WSL step.
 
 ### 1. (Windows only) Install WSL2 + Ubuntu
 
@@ -25,47 +25,58 @@ Reboot when prompted, then launch **Ubuntu** from the Start menu and
 create your Linux username and password. All remaining steps are run
 **inside the WSL/Ubuntu shell**.
 
-### 2. Install system dependencies
+### 2. Run the automated setup script (recommended)
+
+The repo includes [`setup_env.sh`](./setup_env.sh) which performs every
+install step for you (system packages, cloning AlphaMissense, creating
+the Python venv, installing dependencies, and running the install test).
+
+From the repo root:
 
 ```bash
-sudo apt update
-sudo apt install -y python3.11-venv aria2 hmmer git
+bash setup_env.sh
 ```
 
-`hmmer` provides `jackhmmer`, which AlphaMissense uses to build the
-multiple sequence alignments. `aria2` is used for fast database
-downloads.
-
-### 3. Clone AlphaMissense
+To also download the precomputed AlphaMissense predictions
+(~5–10 GB, into `./data`):
 
 ```bash
-git clone https://github.com/google-deepmind/alphamissense.git
-cd alphamissense
+bash setup_env.sh --with-data
 ```
 
-### 4. Create the Python virtual environment
-
-```bash
-python3 -m venv ./venv
-venv/bin/pip install --upgrade pip
-venv/bin/pip install -r requirements.txt
-venv/bin/pip install -e .
-```
-
-### 5. Verify the installation
-
-```bash
-venv/bin/python test/test_installation.py
-```
-
-If the test passes, the environment is ready.
-
-### 6. Reactivating the environment in a new shell
+When the script finishes, activate the environment with:
 
 ```bash
 cd alphamissense
 source venv/bin/activate
 ```
+
+The script is idempotent — re-running it is safe and will skip steps
+that are already complete.
+
+### 3. Manual setup (fallback)
+
+If you prefer to run the steps yourself, or the script fails on your
+system, the equivalent manual commands are:
+
+```bash
+sudo apt update
+sudo apt install -y python3.11-venv aria2 hmmer git
+
+git clone https://github.com/google-deepmind/alphamissense.git
+cd alphamissense
+
+python3 -m venv ./venv
+venv/bin/pip install --upgrade pip
+venv/bin/pip install -r requirements.txt
+venv/bin/pip install -e .
+
+venv/bin/python test/test_installation.py
+```
+
+`hmmer` provides `jackhmmer`, which AlphaMissense uses to build the
+multiple sequence alignments. `aria2` is used for fast database
+downloads.
 
 ---
 
@@ -76,17 +87,18 @@ human missense substitution in a public Google Cloud Storage bucket.
 For most downstream oncogene analyses you only need these files — you
 do **not** need to run the model yourself.
 
-Browse the bucket here:
-<https://console.cloud.google.com/storage/browser/dm_alphamissense>
+The easiest way is `bash setup_env.sh --with-data` (see above), which
+downloads the two most commonly used files via `aria2`.
 
-To download the two most commonly used files (~several GB each) using
-`gsutil` (install instructions: <https://cloud.google.com/storage/docs/gsutil_install>):
+To download manually instead, the files are at:
 
-```bash
-mkdir -p data
-gsutil -m cp gs://dm_alphamissense/AlphaMissense_aa_substitutions.tsv.gz ./data/
-gsutil -m cp gs://dm_alphamissense/AlphaMissense_hg38.tsv.gz             ./data/
+```text
+https://storage.googleapis.com/dm_alphamissense/AlphaMissense_aa_substitutions.tsv.gz
+https://storage.googleapis.com/dm_alphamissense/AlphaMissense_hg38.tsv.gz
 ```
+
+You can browse the full bucket here:
+<https://console.cloud.google.com/storage/browser/dm_alphamissense>
 
 | File | Contents |
 | --- | --- |
