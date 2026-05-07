@@ -25,6 +25,11 @@ msa_output/
 # Temporary helper scripts written by tools / agents.
 .tmp_*.sh
 
+# Captured stdout / log files from .scratch/ runs (reproducible from the
+# corresponding scripts; not worth tracking).
+.scratch/*.out
+.scratch/*.log
+
 # OS / editor
 .DS_Store
 Thumbs.db
