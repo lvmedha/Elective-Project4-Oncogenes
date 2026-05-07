@@ -22,17 +22,64 @@ current scientific status, see [`results/STATUS.md`](./results/STATUS.md).
 
 ---
 
-## TL;DR — quick start
+## Do I need Python / WSL / AlphaMissense?
 
-If you're on Windows, do everything inside **WSL2 / Ubuntu** (see the
-WSL note below). All paths and commands assume an Ubuntu shell.
+**No — not to run the existing pipeline.** The core R pipeline
+(`R/01..07_*.R`) is self-contained and only needs **R + an internet
+connection** (it calls Ensembl VEP over REST). Python, WSL, conda, and
+AlphaMissense are **optional** and only required if you want to add
+AlphaMissense pathogenicity scores to the tiering step
+(`R/05_apply_hotspot_tiers.R`) — that's a planned enhancement, not a
+current dependency. If you just want to reproduce the existing results,
+skip straight to **TL;DR — R-only quick start** below and ignore the
+WSL / conda / `setup_*.sh` sections entirely.
+
+---
+
+## TL;DR — R-only quick start (no Python required)
+
+This is the path most users want. It reproduces everything in
+`results/all_42genes/` using only R.
+
+```r
+# From R, in the project root:
+install.packages(c("data.table","httr2","jsonlite","digest","readxl","ggplot2"))
+
+source("R/00_build_target_genes.R")    # build data/target_genes.tsv (42 genes)
+source("R/01_profile_inputs.R")
+source("R/02_inspect_vaf.R")
+source("R/03_annotate_variants.R")     # calls Ensembl VEP REST
+source("R/04_hotspot_summary.R")
+source("R/05_apply_hotspot_tiers.R")
+source("R/06_link_to_depmap.R")
+source("R/07_waterfall_plots.R")
+```
+
+`R/00_build_target_genes.R` reads
+`data/oncogene_shortlist_sjpedpanel.tsv`. If that file is missing in your
+clone (it's gitignored along with the rest of `data/`), copy the version
+shipped under `.scratch/`:
 
 ```bash
-# 1. From a fresh WSL/Ubuntu shell, in this repo's root:
+mkdir -p data
+cp .scratch/oncogene_shortlist.tsv data/oncogene_shortlist_sjpedpanel.tsv
+```
+
+That's the entire dependency footprint — no Python, no WSL, no conda.
+
+---
+
+## (Optional) TL;DR — AlphaMissense / local-VEP setup
+
+Only follow this if you want to add AlphaMissense scores or run VEP
+offline. On Windows this **must** be done inside **WSL2 / Ubuntu** (see
+the WSL note below). All commands below assume an Ubuntu shell.
+
+```bash
+# From a fresh WSL/Ubuntu shell, in this repo's root:
 bash setup_alpha_tools.sh    # creates the alpha_tools conda env (VEP + Python 3.11)
 bash setup_env.sh --all      # also installs AlphaMissense (chains into setup_alpha_tools.sh)
 
-# 2. Use it
 conda activate alpha_tools
 python -c "import alphamissense; from alphamissense.model import config; \
            print('OK', config.model_config().model.num_recycle)"
@@ -83,7 +130,11 @@ the local VEP install are auxiliary layers that the R outputs feed into.
 
 ---
 
-## Environment setup
+## Environment setup (optional — AlphaMissense / local VEP only)
+
+> Skip this entire section if you just want to run the R pipeline. The
+> R scripts call Ensembl VEP over REST and do not need any of the
+> environments below.
 
 There are two complementary environments:
 
@@ -272,6 +323,9 @@ for inference from raw sequences.
 ---
 
 ## Running the R pipeline
+
+This is the project's core analysis path and **does not require Python,
+WSL, or conda** — see the R-only TL;DR above for the minimum setup.
 
 The numbered scripts in [`R/`](./R) form a linear pipeline. Each script
 reads from `data/` and writes into `results/`. Run them in order:
