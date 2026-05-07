@@ -16,6 +16,15 @@ data/
 *.fa
 msa_output/
 
+# AlphaMissense source repo (cloned to WSL native FS at ~/alphamissense and
+# previously symlinked here as ./alphamissense -- WSL symlinks on /mnt/c are
+# unreadable to Windows-native git, hence this hard ignore).
+/alphamissense
+/alphamissense/
+
+# Temporary helper scripts written by tools / agents.
+.tmp_*.sh
+
 # OS / editor
 .DS_Store
 Thumbs.db

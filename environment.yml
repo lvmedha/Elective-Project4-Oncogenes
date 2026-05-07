@@ -1,0 +1,18 @@
+name: alpha_tools
+# High-level spec for the `alpha_tools` conda env used by this project.
+# This env provides a LOCAL Ensembl VEP install as an optional fallback
+# to the REST API used in R/03_annotate_variants.R (and friends).
+#
+# Build it with:
+#     bash setup_alpha_tools.sh
+# or manually:
+#     mamba env create -f environment.yml      # or `conda env create ...`
+#
+# For an EXACT lockfile-style reproduction, use environment.lock.yml instead
+# (250+ pinned deps, generated via `conda env export`).
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python=3.11
+  - ensembl-vep

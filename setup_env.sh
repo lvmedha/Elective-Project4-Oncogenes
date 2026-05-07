@@ -5,13 +5,19 @@
 # One-shot installer for the AlphaMissense environment used in this project.
 # Tested on Ubuntu 22.04 / WSL2-Ubuntu. Should work on any Debian-based distro.
 #
+# Note: this only sets up Google DeepMind's AlphaMissense (a python venv at
+# alphamissense/venv). For the SEPARATE Ensembl-VEP / `alpha_tools` conda env
+# used as a local fallback by R/03_annotate_variants.R, see setup_alpha_tools.sh
+# (or pass --all here to chain both).
+#
 # Usage:
-#   bash setup_env.sh                # install env only
-#   bash setup_env.sh --with-data    # also download precomputed predictions
-#                                    # (~5-10 GB, into ./data)
+#   bash setup_env.sh                # AlphaMissense env only
+#   bash setup_env.sh --with-data    # also download precomputed AlphaMissense
+#                                    # predictions (~5-10 GB, into ./data)
+#   bash setup_env.sh --all          # also run setup_alpha_tools.sh after
 #   bash setup_env.sh --help
 #
-# After it finishes, activate the env with:
+# After it finishes, activate the AlphaMissense env with:
 #   source alphamissense/venv/bin/activate
 # ---------------------------------------------------------------------------
 
@@ -19,11 +25,13 @@ set -euo pipefail
 
 # ----- arg parsing ---------------------------------------------------------
 WITH_DATA=0
+ALSO_ALPHA_TOOLS=0
 for arg in "$@"; do
     case "$arg" in
         --with-data) WITH_DATA=1 ;;
+        --all)       ALSO_ALPHA_TOOLS=1 ;;
         -h|--help)
-            sed -n '2,18p' "$0"
+            sed -n '2,23p' "$0"
             exit 0
             ;;
         *)
@@ -107,12 +115,22 @@ if [[ $WITH_DATA -eq 1 ]]; then
     done
 fi
 
+# ----- 6. (optional) chain into setup_alpha_tools.sh ----------------------
+if [[ $ALSO_ALPHA_TOOLS -eq 1 ]]; then
+    if [[ -x ./setup_alpha_tools.sh || -f ./setup_alpha_tools.sh ]]; then
+        log "Running setup_alpha_tools.sh ..."
+        bash ./setup_alpha_tools.sh
+    else
+        warn "--all was passed but setup_alpha_tools.sh was not found in $(pwd). Skipping."
+    fi
+fi
+
 # ----- done ----------------------------------------------------------------
 cat <<EOF
 
 \033[1;32mAll done.\033[0m
 
-To start using the environment:
+To start using the AlphaMissense environment:
 
     cd alphamissense
     source venv/bin/activate
@@ -120,4 +138,8 @@ To start using the environment:
 To deactivate when finished:
 
     deactivate
+
+To also build the VEP / alpha_tools conda env (one-time):
+
+    bash setup_alpha_tools.sh
 EOF
