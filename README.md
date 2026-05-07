@@ -1,109 +1,238 @@
 # Elective-Project4-Oncogenes
 
-Course project analyzing oncogene missense variants using
-[AlphaMissense](https://github.com/google-deepmind/alphamissense).
+Course project analyzing oncogene missense variants across pediatric
+tumor cohorts and the PedDep cell-line panel. Combines:
 
-This README documents the steps needed to reproduce the AlphaMissense
-environment used in this project.
+- An **R pipeline** (under [`R/`](./R)) that takes a long-format VAF
+  table, restricts to 10 target oncogenes, annotates every coding
+  variant via the **Ensembl VEP** REST API, applies a curated Tier-0
+  hotspot list, and produces tiered mutation tables and waterfall plots.
+- An **AlphaMissense layer** (Google DeepMind's
+  [AlphaMissense](https://github.com/google-deepmind/alphamissense))
+  for proteome-wide missense pathogenicity scoring of the same variants.
+- A local **Ensembl VEP** install (via bioconda) as a fallback to the
+  REST API when batch sizes / network are an issue.
+
+For a step-by-step description of what the R pipeline produces and the
+current scientific status, see [`results/STATUS.md`](./results/STATUS.md).
 
 ---
 
-## Environment Setup (AlphaMissense)
+## TL;DR — quick start
 
-AlphaMissense is built for **Linux**. On Windows, use **WSL2 (Ubuntu)**.
-On macOS or native Linux, skip the WSL step.
+If you're on Windows, do everything inside **WSL2 / Ubuntu** (see the
+WSL note below). All paths and commands assume an Ubuntu shell.
 
-### 1. (Windows only) Install WSL2 + Ubuntu
+```bash
+# 1. From a fresh WSL/Ubuntu shell, in this repo's root:
+bash setup_alpha_tools.sh    # creates the alpha_tools conda env (VEP + Python 3.11)
+bash setup_env.sh --all      # also installs AlphaMissense (chains into setup_alpha_tools.sh)
 
-In an **Administrator** PowerShell:
+# 2. Use it
+conda activate alpha_tools
+python -c "import alphamissense; from alphamissense.model import config; \
+           print('OK', config.model_config().model.num_recycle)"
+```
+
+If `conda activate` reports "command not found", source it once with
+`source ~/mambaforge/etc/profile.d/conda.sh` (or your conda's path) and
+try again.
+
+---
+
+## Repo layout
+
+```
+.
+├── R/                        # R analysis pipeline (01..07)
+├── data/                     # inputs / caches; gitignored, NOT shipped
+├── results/                  # tidy outputs (TSVs, PDFs); see STATUS.md
+├── environment.yml           # high-level conda env spec for alpha_tools
+├── environment.lock.yml      # full pinned lockfile for alpha_tools
+├── setup_alpha_tools.sh      # idempotent installer for alpha_tools env
+├── setup_env.sh              # original AlphaMissense venv installer (+ --all flag)
+└── README.md
+```
+
+The R pipeline is the project's core analysis path; AlphaMissense and
+the local VEP install are auxiliary layers that the R outputs feed into.
+
+---
+
+## Environment setup
+
+There are two complementary environments:
+
+| Env | Built by | Contents | Used for |
+| --- | --- | --- | --- |
+| `alpha_tools` (conda) | `setup_alpha_tools.sh` | Python 3.11, ensembl-vep (+BLAST/HMMER/BioPerl/etc.), open-mpi | Local VEP, hosting AlphaMissense |
+| `alphamissense/venv` (pip venv) | `setup_env.sh` | Python 3.11 venv, AlphaMissense + JAX | Optional, separate AlphaMissense install |
+
+**Recommended** path is the conda env (`alpha_tools`) because:
+
+- It already provides Python 3.11 and `jackhmmer`, so AlphaMissense can
+  be installed *into it* without `apt install python3.11-venv` and
+  without `sudo`.
+- It is the env the R pipeline's local-VEP fallback also uses, so
+  there's just one thing to `conda activate`.
+
+The pip-venv path (`setup_env.sh`) is preserved as a fallback that
+mirrors AlphaMissense's official upstream install instructions.
+
+### Prereq: WSL2 (Windows only)
+
+AlphaMissense and `ensembl-vep` are Linux-only. On Windows you must
+run **inside WSL2 / Ubuntu**. From an **Administrator** PowerShell:
 
 ```powershell
 wsl --install
 ```
 
-Reboot when prompted, then launch **Ubuntu** from the Start menu and
-create your Linux username and password. All remaining steps are run
-**inside the WSL/Ubuntu shell**.
-
-### 2. Run the automated setup script (recommended)
-
-The repo includes [`setup_env.sh`](./setup_env.sh) which performs every
-install step for you (system packages, cloning AlphaMissense, creating
-the Python venv, installing dependencies, and running the install test).
-
-From the repo root:
+Reboot when prompted, launch **Ubuntu** from the Start menu, create a
+Linux username and password. Open the project from inside WSL with:
 
 ```bash
-bash setup_env.sh
+cd /mnt/c/Users/<you>/Documents/Elective-Project4-Oncogenes
 ```
 
-To also download the precomputed AlphaMissense predictions
-(~5–10 GB, into `./data`):
+> **WSL filesystem caveat.** The `/mnt/c/...` mount does not support
+> POSIX permission bits, so cloning git repos or creating symlinks
+> *inside* `/mnt/c/...` from WSL fails with `chmod ... Operation not
+> permitted` and `Function not implemented`. The setup scripts therefore
+> clone AlphaMissense into the WSL **native** filesystem
+> (`~/alphamissense`) and Python's editable install lives there, not
+> inside the project folder. The project's R/data/results files stay on
+> `/mnt/c/...` so Windows tooling and Git can see them normally.
+
+### Option A — `setup_alpha_tools.sh` (recommended)
 
 ```bash
-bash setup_env.sh --with-data
+bash setup_alpha_tools.sh                  # create alpha_tools from environment.yml
+bash setup_alpha_tools.sh --lock           # use environment.lock.yml (pinned, exact)
+bash setup_alpha_tools.sh --with-vep-cache # also fetch the GRCh38 VEP cache (~25 GB)
+bash setup_alpha_tools.sh --force          # recreate env even if it exists
 ```
 
-When the script finishes, activate the environment with:
+The script:
+
+1. Detects/sources an existing `mambaforge` / `miniforge3` / `miniconda3` /
+   `anaconda3` install, or downloads and installs Miniforge if none exists.
+2. Creates the `alpha_tools` conda env from `environment.yml` (high-level)
+   or `environment.lock.yml` (exact, ~290 pinned packages).
+3. Verifies `vep` and `vep_install` are on PATH inside the env.
+4. (Optional) Runs `vep_install` to download the GRCh38 cache into
+   `data/vep/` for offline VEP runs.
+
+To install AlphaMissense **into the same env** afterwards (no separate
+venv, no sudo, no apt):
+
+```bash
+conda activate alpha_tools
+conda install -n alpha_tools pip   # alpha_tools doesn't ship pip by default
+git clone https://github.com/google-deepmind/alphamissense.git ~/alphamissense
+cd ~/alphamissense
+# AlphaMissense's requirements.txt pins jaxlib==0.4.14 which has been
+# yanked from PyPI; bump to 0.4.18 (oldest available, dm-haiku 0.0.10
+# is compatible).
+sed -i 's/^jax==0\.4\.14$/jax==0.4.18/'      requirements.txt
+sed -i 's/^jaxlib==0\.4\.14$/jaxlib==0.4.18/' requirements.txt
+pip install -r requirements.txt
+pip install -e .
+```
+
+Quick smoke test (from any directory):
+
+```bash
+python -c "
+import alphamissense
+from alphamissense.model import config
+from alphamissense.data import pipeline_missense
+print('alphamissense OK')
+print('default num_recycle:', config.model_config().model.num_recycle)
+"
+```
+
+> The shipped `test/test_installation.py` hardcodes
+> `/usr/bin/jackhmmer` and will fail until that path is patched (or
+> until you symlink the env's `jackhmmer` to `/usr/bin/jackhmmer` with
+> `sudo`). The above import smoke test does not need `jackhmmer`.
+
+### Option B — `setup_env.sh` (separate pip venv)
+
+The original installer creates a standalone `alphamissense/venv`
+inside the cloned repo. This **requires `sudo`** (for `apt-get install
+python3.11-venv aria2 hmmer git`) and creates duplicates of Python and
+HMMER that `alpha_tools` would already provide.
+
+```bash
+bash setup_env.sh                # AlphaMissense venv only
+bash setup_env.sh --with-data    # also fetch ~5–10 GB precomputed predictions
+bash setup_env.sh --all          # also chain into setup_alpha_tools.sh
+bash setup_env.sh --help
+```
+
+Activate with:
 
 ```bash
 cd alphamissense
 source venv/bin/activate
 ```
 
-The script is idempotent — re-running it is safe and will skip steps
-that are already complete.
+Both scripts are idempotent — re-running is safe and skips work that's
+already complete.
 
-### 3. Manual setup (fallback)
+### Optional: auto-activation in WSL
 
-If you prefer to run the steps yourself, or the script fails on your
-system, the equivalent manual commands are:
+If you want every shell that's `cd`'d into this project to auto-activate
+`alpha_tools` (so you don't have to `conda activate` manually), append
+this block to `~/.bashrc` inside WSL:
 
 ```bash
-sudo apt update
-sudo apt install -y python3.11-venv aria2 hmmer git
-
-git clone https://github.com/google-deepmind/alphamissense.git
-cd alphamissense
-
-python3 -m venv ./venv
-venv/bin/pip install --upgrade pip
-venv/bin/pip install -r requirements.txt
-venv/bin/pip install -e .
-
-venv/bin/python test/test_installation.py
+# >>> alpha_tools project hook (Elective-Project4-Oncogenes) >>>
+__alpha_tools_project_root="/mnt/c/Users/<you>/Documents/Elective-Project4-Oncogenes"
+__alpha_tools_maybe_activate() {
+    case "$PWD" in
+        "$__alpha_tools_project_root"|"$__alpha_tools_project_root"/*)
+            if [ "$CONDA_DEFAULT_ENV" != "alpha_tools" ]; then
+                conda activate alpha_tools >/dev/null 2>&1
+            fi
+            ;;
+    esac
+}
+__alpha_tools_maybe_activate
+PROMPT_COMMAND="__alpha_tools_maybe_activate;${PROMPT_COMMAND:-}"
+# <<< alpha_tools project hook <<<
 ```
 
-`hmmer` provides `jackhmmer`, which AlphaMissense uses to build the
-multiple sequence alignments. `aria2` is used for fast database
-downloads.
+After that, opening any WSL shell (Cursor terminal, Windows Terminal,
+plain `wsl`, ...) and `cd`-ing into the project will activate the env
+silently.
 
 ---
 
-## (Optional) Download precomputed predictions
+## (Optional) Precomputed AlphaMissense predictions
 
 DeepMind publishes precomputed AlphaMissense scores for every possible
 human missense substitution in a public Google Cloud Storage bucket.
 For most downstream oncogene analyses you only need these files — you
 do **not** need to run the model yourself.
 
-The easiest way is `bash setup_env.sh --with-data` (see above), which
-downloads the two most commonly used files via `aria2`.
+The easiest way is `bash setup_env.sh --with-data`, which downloads
+the two most commonly used files via `aria2` into `./data/`:
 
-To download manually instead, the files are at:
+| File | Contents |
+| --- | --- |
+| `AlphaMissense_aa_substitutions.tsv.gz` | Pathogenicity scores for all possible single-amino-acid substitutions in the human proteome. |
+| `AlphaMissense_hg38.tsv.gz` | Same predictions mapped to GRCh38 (hg38) coordinates. |
+
+To download manually instead:
 
 ```text
 https://storage.googleapis.com/dm_alphamissense/AlphaMissense_aa_substitutions.tsv.gz
 https://storage.googleapis.com/dm_alphamissense/AlphaMissense_hg38.tsv.gz
 ```
 
-You can browse the full bucket here:
-<https://console.cloud.google.com/storage/browser/dm_alphamissense>
-
-| File | Contents |
-| --- | --- |
-| `AlphaMissense_aa_substitutions.tsv.gz` | Pathogenicity scores for all possible single-amino-acid substitutions in the human proteome. |
-| `AlphaMissense_hg38.tsv.gz` | Same predictions mapped to the GRCh38 (hg38) genome coordinates. |
+Full bucket: <https://console.cloud.google.com/storage/browser/dm_alphamissense>
 
 ---
 
@@ -113,7 +242,37 @@ If you intend to *run* the AlphaMissense data pipeline (not just use
 the precomputed predictions), you will additionally need the genetic
 sequence databases (BFD, MGnify, UniRef90). Follow the instructions in
 the [AlphaFold repository](https://github.com/google-deepmind/alphafold)
-to download them. These are large (hundreds of GB).
+to download them. These are large (hundreds of GB) and only required
+for inference from raw sequences.
+
+---
+
+## Running the R pipeline
+
+The numbered scripts in [`R/`](./R) form a linear pipeline. Each script
+reads from `data/` and writes into `results/`. Run them in order:
+
+```r
+source("R/01_profile_inputs.R")        # sanity-check inputs
+source("R/02_inspect_vaf.R")           # explore VAF, choose target loci
+source("R/03_annotate_variants.R")     # VEP REST -> 03_vaf_annotated.tsv
+source("R/04_hotspot_summary.R")       # per-gene recurrence summary
+source("R/05_apply_hotspot_tiers.R")   # join Tier-0 hotspots, assign Mut_Status
+source("R/06_link_to_depmap.R")        # join DepMap ACH IDs (see STATUS.md)
+source("R/07_waterfall_plots.R")       # waterfall PDFs in results/
+```
+
+Required R packages: `data.table`, `httr2`, `jsonlite`, `digest`,
+`ggplot2`. Install with
+`install.packages(c("data.table","httr2","jsonlite","digest","ggplot2"))`.
+
+`R/03_annotate_variants.R` calls the public Ensembl VEP REST endpoint
+by default and caches responses to `data/cache/`. If you have the local
+VEP install (via `setup_alpha_tools.sh`), you can swap it in for offline
+or large-batch runs.
+
+See [`results/STATUS.md`](./results/STATUS.md) for current pipeline
+status, per-gene tallies, and outstanding scientific questions.
 
 ---
 
@@ -126,3 +285,7 @@ to download them. These are large (hundreds of GB).
   <https://github.com/google-deepmind/alphamissense>
 - AlphaMissense predictions bucket:
   <https://console.cloud.google.com/storage/browser/dm_alphamissense>
+- Ensembl Variant Effect Predictor (VEP):
+  <https://www.ensembl.org/info/docs/tools/vep/index.html>
+- bioconda `ensembl-vep` recipe:
+  <https://bioconda.github.io/recipes/ensembl-vep/README.html>
