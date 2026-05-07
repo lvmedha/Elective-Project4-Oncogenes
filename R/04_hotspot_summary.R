@@ -1,13 +1,18 @@
 # 04_hotspot_summary.R
 # Inspect the annotated VAF: which protein changes are most recurrent in
-# each of the 10 target genes? Then (manually) compare to the canonical
-# activating-hotspot list to build the Tier-0 set.
+# each target gene? Compare to the curated activating-hotspot list
+# (data/hotspots_tier0.csv) to summarize Tier-0 vs other-missense calls
+# before 05_apply_hotspot_tiers.R does the formal assignment.
 
 suppressPackageStartupMessages({
   library(data.table)
 })
 
-OUT_DIR <- "C:/Users/mvijayan/Documents/Elective-Project4-Oncogenes/results"
+PROJ_DIR <- "C:/Users/mvijayan/Documents/Elective-Project4-Oncogenes"
+DATA_DIR <- file.path(PROJ_DIR, "data")
+RUN_NAME <- "all_42genes"
+OUT_DIR  <- file.path(PROJ_DIR, "results", RUN_NAME)
+dir.create(OUT_DIR, showWarnings = FALSE, recursive = TRUE)
 ann <- fread(file.path(OUT_DIR, "03_vaf_annotated.tsv"))
 
 cat("Annotated rows:", nrow(ann), "\n")
@@ -31,31 +36,24 @@ fwrite(top, file.path(OUT_DIR, "04_recurrent_missense_per_gene.tsv"),
        sep = "\t")
 cat("\nWrote:", file.path(OUT_DIR, "04_recurrent_missense_per_gene.tsv"), "\n")
 
-# Check how many missense changes hit a known activating residue. We use
-# a coarse, well-known list. (Full Tier-0 curation goes in next step.)
-known_codons <- list(
-  KRAS   = c(12, 13, 61, 117, 146),
-  NRAS   = c(12, 13, 61),
-  HRAS   = c(12, 13, 61),
-  BRAF   = c(469, 581, 594, 600, 597, 601),
-  PIK3CA = c(88, 110, 542, 545, 546, 1043, 1047),
-  MAP2K1 = c(53, 56, 57, 67, 124, 211),
-  EGFR   = c(719, 746, 747, 858, 861),
-  ERBB2  = c(310, 755, 777, 842, 869),
-  ALK    = c(1174, 1196, 1245, 1275),
-  CTNNB1 = c(32, 33, 34, 35, 37, 41, 45)
-)
+# Check how many missense changes hit a known activating residue.
+# Source the (gene, codon) hotspot list from data/hotspots_tier0.csv so it
+# stays in sync with what 05_apply_hotspot_tiers.R uses for formal
+# Mut_Status assignment. Genes in the target set without curated entries
+# (e.g. fusion partners, amplification-driven oncogenes) just get FALSE for
+# every variant -- they'll all flow into Missense_Other in step 05.
+hotspots <- fread(file.path(DATA_DIR, "hotspots_tier0.csv"))
+hotspots[, codon := as.integer(codon)]
+cat("Tier-0 hotspot file: ", nrow(hotspots),
+    " (gene, codon) entries across ",
+    uniqueN(hotspots$gene), " genes\n", sep = "")
 
 ann[, codon := protein_start]
-# For each row, check whether its (gene, codon) is a known activating
-# residue. mapply walks the two columns in lockstep; the closure looks up
-# the gene's codon vector in `known_codons` and tests membership.
-# (Used here for the QC summary; the production tier assignment in 05
-# uses a faster vectorised paste()-trick on the curated CSV.)
-ann[, hotspot_codon := mapply(function(g, c) {
-  if (is.na(g) || is.na(c)) return(FALSE)
-  c %in% known_codons[[g]]
-}, gene_symbol, codon)]
+# Two-key lookup ("is this gene+codon in the hotspot file?"): flatten both
+# keys into a single string ("KRAS 12") and use %in% set membership --
+# faster and shorter than a join.
+ann[, hotspot_codon := paste(gene_symbol, codon) %in%
+                       paste(hotspots$gene, hotspots$codon)]
 
 cat("\nKnown-codon hits per gene:\n")
 print(ann[Variant_Class == "Missense",
@@ -67,6 +65,6 @@ print(ann[Variant_Class == "Missense",
 
 # Also: tumor-type mix among hotspot-hit PIDs
 ann[, prefix6 := substr(PID, 1, 6)]
-cat("\nTumor-type mix in PIDs carrying a known hotspot in any of the 10 genes:\n")
+cat("\nTumor-type mix in PIDs carrying a known hotspot in any target gene:\n")
 print(ann[Variant_Class == "Missense" & hotspot_codon == TRUE,
           .(n_pids = uniqueN(PID)), by = prefix6][order(-n_pids)])

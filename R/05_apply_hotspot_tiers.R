@@ -15,7 +15,9 @@ suppressPackageStartupMessages({
 })
 
 PROJ_DIR <- "C:/Users/mvijayan/Documents/Elective-Project4-Oncogenes"
-OUT_DIR  <- file.path(PROJ_DIR, "results")
+RUN_NAME <- "all_42genes"
+OUT_DIR  <- file.path(PROJ_DIR, "results", RUN_NAME)
+dir.create(OUT_DIR, showWarnings = FALSE, recursive = TRUE)
 
 ann      <- fread(file.path(OUT_DIR, "03_vaf_annotated.tsv"))
 hotspots <- fread(file.path(PROJ_DIR, "data/hotspots_tier0.csv"))

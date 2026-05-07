@@ -1,8 +1,10 @@
 # 03_annotate_variants.R
 # "Fix the format" of AllMarkers_VAF_long.tsv:
 #
-#   - keep only SNV/Indel/MNV markers that fall in any of our 10 target
-#     oncogene loci
+#   - keep only SNV/Indel/MNV markers that fall in any of the target
+#     oncogene loci (data/target_genes.tsv -- 42 genes from the SJPedPanel
+#     paper's GoF + pediatric-solid-tumor filter; see
+#     R/00_build_target_genes.R for how it's built)
 #   - submit them to Ensembl VEP REST (GRCh38) to get gene_symbol,
 #     consequence, HGVSp, protein position, amino-acid change
 #   - keep canonical-transcript annotations only
@@ -18,25 +20,34 @@ suppressPackageStartupMessages({
   library(jsonlite)
 })
 
-DOC_DIR <- "C:/Users/mvijayan/Documents"
-OUT_DIR <- "C:/Users/mvijayan/Documents/Elective-Project4-Oncogenes/results"
-CACHE_DIR <- "C:/Users/mvijayan/Documents/Elective-Project4-Oncogenes/data/cache"
+PROJ_DIR  <- "C:/Users/mvijayan/Documents/Elective-Project4-Oncogenes"
+DOC_DIR   <- "C:/Users/mvijayan/Documents"
+DATA_DIR  <- file.path(PROJ_DIR, "data")
+RUN_NAME  <- "all_42genes"
+OUT_DIR   <- file.path(PROJ_DIR, "results", RUN_NAME)
+CACHE_DIR <- file.path(DATA_DIR, "cache")
+dir.create(OUT_DIR,   showWarnings = FALSE, recursive = TRUE)
 dir.create(CACHE_DIR, showWarnings = FALSE, recursive = TRUE)
 
 # -----------------------------------------------------------------------------
-# 1. The 10 target oncogenes and their canonical hg38 loci (with 2-kb pad).
-#    Coordinates verified against UCSC/Ensembl GRCh38 gene records.
+# 1. Target oncogenes + hg38 loci come from data/target_genes.tsv.
+#    That file is built by R/00_build_target_genes.R from
+#    data/oncogene_shortlist_sjpedpanel.tsv (42-gene Tier A/B/C list) and
+#    Ensembl REST coordinate lookups.
 # -----------------------------------------------------------------------------
-target_genes <- data.table(
-  gene  = c("KRAS",  "NRAS",  "HRAS",  "BRAF",   "PIK3CA",
-            "MAP2K1","EGFR",  "ERBB2", "ALK",    "CTNNB1"),
-  chrom = c("chr12", "chr1",  "chr11", "chr7",   "chr3",
-            "chr15", "chr7",  "chr17", "chr2",   "chr3"),
-  start = c(25205246,114704464,533488,140719327,179148115,
-            66386654,55019017, 39688094,29192774,41194741),
-  end   = c(25250929,114716894,535567,140924929,179240096,
-            66495020,55211628, 39728660,29921586,41260096)
-)
+TARGETS_FILE <- file.path(DATA_DIR, "target_genes.tsv")
+if (!file.exists(TARGETS_FILE)) {
+  stop("Missing ", TARGETS_FILE,
+       ". Run `Rscript R/00_build_target_genes.R` first.")
+}
+target_genes <- fread(TARGETS_FILE,
+                      select = c("gene","chrom","start","end","tier","score"))
+cat(sprintf("Loaded %d target genes (%s) from %s\n",
+            nrow(target_genes),
+            paste(target_genes[, .N, by = tier][order(tier),
+                                                paste0(tier, "=", N)],
+                  collapse = " "),
+            TARGETS_FILE))
 # Pad each gene's locus by 2 kb on each side so we don't miss splice-region
 # variants and 5'/3'-UTR mutations that sit just outside the CDS.
 PAD <- 2000L
@@ -217,8 +228,15 @@ cat("\nVEP returned", nrow(vep_dt),
     "transcript consequences across",
     uniqueN(vep_dt$vep_input), "variants.\n")
 
-# Restrict to our 10 target genes only. NRAS-locus variants will produce
-# rows for both NRAS and the overlapping CSDE1 gene; this filter drops CSDE1.
+# Normalize HGNC renames so VEP's current symbol matches our legacy
+# target gene name (the SJPedPanel paper / OncoKB still use H3F3A etc.).
+hgnc_legacy <- c("H3-3A" = "H3F3A", "H3-3B" = "H3F3B",
+                 "H3C2"  = "HIST1H3B", "H3C3" = "HIST1H3C")
+vep_dt[gene_symbol %in% names(hgnc_legacy),
+       gene_symbol := hgnc_legacy[gene_symbol]]
+
+# Restrict to our target genes only. Variants in overlapping non-target
+# genes (e.g. CSDE1 next to NRAS) get dropped here.
 vep_dt <- vep_dt[gene_symbol %in% target_genes$gene]
 # We still might have multiple rows per (variant, gene): one per Ensembl
 # transcript (canonical, RefSeq, alt isoforms). We want ONE row representing
@@ -309,7 +327,9 @@ final <- merge(vaf_in_targets[, .(PID, Sample, Marker_hg38, Marker.Type,
 
 # Keep only rows where VEP's gene_symbol matches the gene we got by locus
 # overlap. This removes e.g. CSDE1-annotated rows that come along when an
-# NRAS variant happens to fall inside the CSDE1 gene body too.
+# NRAS variant happens to fall inside the CSDE1 gene body too. Some of our
+# new fusion-partner targets (e.g. KIAA1549, ASPSCR1) overlap other genes
+# at the locus too -- this filter drops those nuisance annotations.
 final <- final[gene_symbol == gene_target]
 setcolorder(final, c("PID","Sample","gene_target","gene_symbol",
                      "Marker_hg38","Marker.Type","Variant_Class",

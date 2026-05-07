@@ -13,8 +13,14 @@ suppressPackageStartupMessages({
   library(data.table)
 })
 
-DOC_DIR <- "C:/Users/mvijayan/Documents"
-OUT_DIR <- "C:/Users/mvijayan/Documents/Elective-Project4-Oncogenes/results"
+# OUT_DIR is per-run so we can keep yesterday's pilot outputs frozen under
+# results/pilot_10genes/ while regenerating the 42-gene run under
+# results/all_42genes/. Change RUN_NAME to point a fresh re-run at a new
+# subfolder.
+DOC_DIR  <- "C:/Users/mvijayan/Documents"
+PROJ_DIR <- "C:/Users/mvijayan/Documents/Elective-Project4-Oncogenes"
+RUN_NAME <- "all_42genes"
+OUT_DIR  <- file.path(PROJ_DIR, "results", RUN_NAME)
 dir.create(OUT_DIR, showWarnings = FALSE, recursive = TRUE)
 
 cat("\n================ depmap_meta.csv ================\n")

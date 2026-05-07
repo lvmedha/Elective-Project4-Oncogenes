@@ -11,7 +11,13 @@ suppressPackageStartupMessages({
 
 DOC_DIR  <- "C:/Users/mvijayan/Documents"
 PROJ_DIR <- "C:/Users/mvijayan/Documents/Elective-Project4-Oncogenes"
-OUT_DIR  <- file.path(PROJ_DIR, "results")
+DATA_DIR <- file.path(PROJ_DIR, "data")
+RUN_NAME <- "all_42genes"
+OUT_DIR  <- file.path(PROJ_DIR, "results", RUN_NAME)
+dir.create(OUT_DIR, showWarnings = FALSE, recursive = TRUE)
+
+target_genes <- fread(file.path(DATA_DIR, "target_genes.tsv"),
+                      select = c("gene","tier"))$gene
 
 # ---- 1. Load samples.txt --------------------------------------------------
 samp <- fread(file.path(DOC_DIR, "samples.txt"),
@@ -81,7 +87,8 @@ ped_solid <- meta[AgeCategory == "Pediatric" &
                   OncotreeLineage %in% ped_solid_lineages, ModelID]
 cat("\nPediatric-solid-tumor cell lines (in meta):", length(ped_solid), "\n")
 cat("...of which have CGE:", sum(ped_solid %in% have_cge), "\n")
-cat("...of which carry a mutation in any of our 10 genes:",
+cat("...of which carry a mutation in any of our",
+    length(target_genes), "target genes:",
     uniqueN(mut2[ACH %in% ped_solid]$ACH), "\n")
 
 cat("\nPer-gene mutated cell-line counts WITHIN pediatric solid tumors:\n")

@@ -8,8 +8,13 @@ suppressPackageStartupMessages({
   library(data.table)
 })
 
-DOC_DIR <- "C:/Users/mvijayan/Documents"
-OUT_DIR <- "C:/Users/mvijayan/Documents/Elective-Project4-Oncogenes/results"
+DOC_DIR  <- "C:/Users/mvijayan/Documents"
+PROJ_DIR <- "C:/Users/mvijayan/Documents/Elective-Project4-Oncogenes"
+DATA_DIR <- file.path(PROJ_DIR, "data")
+# Per-run output folder. See R/01_profile_inputs.R for the layout rationale.
+RUN_NAME <- "all_42genes"
+OUT_DIR  <- file.path(PROJ_DIR, "results", RUN_NAME)
+dir.create(OUT_DIR, showWarnings = FALSE, recursive = TRUE)
 
 vaf  <- fread(file.path(DOC_DIR, "AllMarkers_VAF_long.tsv"))
 meta <- fread(file.path(DOC_DIR, "depmap_meta.csv"))
@@ -39,27 +44,19 @@ cat("\n--- ModelSubtypeFeatures or PatientSubtypeFeatures sample values ---\n")
 print(head(unique(meta$ModelSubtypeFeatures), 5))
 print(head(unique(meta$PatientSubtypeFeatures), 5))
 
-# 4. A few canonical oncogene loci on hg38. We just want to know whether
-#    *any* of the 10K markers land in them. This tells us whether the
-#    file is going to be informative for the RAS-pathway analysis.
-oncogene_loci <- data.table(
-  gene  = c("KRAS",  "HRAS",  "NRAS",  "BRAF",   "PIK3CA", "EGFR",
-            "ALK",   "MYCN",  "TP53",  "IDH1",   "FGFR1",  "MAP2K1",
-            "ERBB2", "MET",   "MYC",   "CDKN2A", "RB1",    "PTEN",
-            "CTNNB1","SMARCB1"),
-  chrom = c("chr12","chr11","chr1", "chr7",   "chr3", "chr7",
-            "chr2", "chr2", "chr17","chr2",   "chr8", "chr15",
-            "chr17","chr7", "chr8", "chr9",   "chr13","chr10",
-            "chr3", "chr22"),
-  start = c(25205246, 533488,  114704464, 140719327, 179148115, 55019017,
-            29192774, 15940550,7668402,  208236227, 38411138, 66386654,
-            39688094, 116672196,127736233,21967751, 48303257, 87863438,
-            41194741, 23786966),
-  end   = c(25250929, 535567,  114716894, 140924929, 179240096, 55211628,
-            29921586, 15947007,7687550,  208266074, 38468834, 66495020,
-            39728660, 116798386,127741434,21995301, 48535063, 87971930,
-            41260096, 23834540)
-)
+# 4. Target oncogene loci (hg38) come from data/target_genes.tsv -- the
+#    single source of truth for the rest of the pipeline. Built from the
+#    SJPedPanel paper's GoF + pediatric-solid-tumor filter
+#    (R/00_build_target_genes.R + data/oncogene_shortlist_sjpedpanel.tsv).
+TARGETS_FILE <- file.path(DATA_DIR, "target_genes.tsv")
+if (!file.exists(TARGETS_FILE)) {
+  stop("Missing ", TARGETS_FILE,
+       ". Run `Rscript R/00_build_target_genes.R` first.")
+}
+oncogene_loci <- fread(TARGETS_FILE,
+                        select = c("gene","chrom","start","end","tier","score"))
+cat(sprintf("Loaded %d target genes from %s\n",
+            nrow(oncogene_loci), TARGETS_FILE))
 
 # Marker_hg38 looks like "chr12.25245347.C.T" -- one string per variant
 # encoding chrom.pos.ref.alt with a literal period as the separator.
@@ -92,8 +89,18 @@ all_hits <- snv[oncogene_loci, on = .(chrom = chrom, pos >= start, pos <= end),
 
 cat(sprintf("\nTotal markers in those %d oncogenes: %d (across %d PIDs)\n",
             nrow(oncogene_loci), nrow(all_hits), uniqueN(all_hits$PID)))
-cat("\n--- per-gene PID counts in those 20 loci ---\n")
-print(all_hits[, .(n_markers = .N, n_pids = uniqueN(PID)), by = gene][order(-n_pids)])
+cat("\n--- per-gene PID counts in those loci ---\n")
+print(all_hits[, .(n_markers = .N, n_pids = uniqueN(PID)),
+               by = gene][order(-n_pids)])
+
+# Per-tier rollup so we can sanity-check that every tier has SOME signal
+cat("\n--- per-TIER PID counts ---\n")
+all_hits_tier <- merge(all_hits,
+                       oncogene_loci[, .(gene, tier)],
+                       by = "gene", all.x = TRUE)
+print(all_hits_tier[, .(n_markers = .N, n_pids = uniqueN(PID),
+                         n_genes_with_hits = uniqueN(gene)),
+                     by = tier][order(tier)])
 
 cat("\n--- first 30 oncogene-locus hits ---\n")
 print(head(all_hits, 30))
