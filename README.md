@@ -4,11 +4,15 @@ Course project analyzing oncogene missense variants across pediatric
 tumor cohorts and the PedDep cell-line panel. Combines:
 
 - An **R pipeline** (under [`R/`](./R)) that takes a long-format VAF
-  table, restricts to **42 target oncogenes** (Tier A/B/C list derived
-  from the SJPedPanel paper, Karol et al. 2024 — see
+  table, restricts to **24 target oncogenes** (curated pediatric
+  gain-of-function SNV/indel panel — see
+  [`data/oncogene_shortlist_ped_gof_snvs.tsv`](./data/oncogene_shortlist_ped_gof_snvs.tsv),
+  built into [`data/target_genes.tsv`](./data/target_genes.tsv) by
+  `R/00_build_target_genes.R`). A **legacy 42-gene** SJPedPanel-derived
+  list remains available as
   [`data/oncogene_shortlist_sjpedpanel.tsv`](./data/oncogene_shortlist_sjpedpanel.tsv)
-  and the audit log in `data/filter_oncogenes_sjpedpanel.R`), annotates
-  every coding variant via the **Ensembl VEP** REST API, applies a
+  (switch `SHORTLIST` in `00_build_target_genes.R` to use it). The
+  pipeline annotates every coding variant via the **Ensembl VEP** REST API, applies a
   curated Tier-0 hotspot list, and produces tiered mutation tables and
   waterfall plots.
 - An **AlphaMissense layer** (Google DeepMind's
@@ -25,7 +29,7 @@ current scientific status, see [`results/STATUS.md`](./results/STATUS.md).
 ## Do I need Python / WSL / AlphaMissense?
 
 **No — not to run the existing pipeline.** The core R pipeline
-(`R/01..07_*.R`) is self-contained and only needs **R + an internet
+(`R/00..07_*.R`) is self-contained and only needs **R + an internet
 connection** (it calls Ensembl VEP over REST). Python, WSL, conda, and
 AlphaMissense are **optional** and only required if you want to add
 AlphaMissense pathogenicity scores to the tiering step
@@ -34,18 +38,23 @@ current dependency. If you just want to reproduce the existing results,
 skip straight to **TL;DR — R-only quick start** below and ignore the
 WSL / conda / `setup_*.sh` sections entirely.
 
+The optional **step 08** (`R/08_make_vep_input.R`) is also pure R — it
+re-emits the cohort as a `.vcf` / `.ensembl` pair that a cluster VEP
++ AlphaMissense run can consume. The cluster job itself runs outside
+this repo (St. Jude HPC), so the only thing you need locally is R.
+
 ---
 
 ## TL;DR — R-only quick start (no Python required)
 
 This is the path most users want. It reproduces everything in
-`results/all_42genes/` using only R.
+`results/ped_gof_snv/` (default `RUN_NAME` in `R/01`–`R/07`) using only R.
 
 ```r
 # From R, in the project root:
 install.packages(c("data.table","httr2","jsonlite","digest","readxl","ggplot2"))
 
-source("R/00_build_target_genes.R")    # build data/target_genes.tsv (42 genes)
+source("R/00_build_target_genes.R")    # build data/target_genes.tsv (24 genes)
 source("R/01_profile_inputs.R")
 source("R/02_inspect_vaf.R")
 source("R/03_annotate_variants.R")     # calls Ensembl VEP REST
@@ -56,14 +65,11 @@ source("R/07_waterfall_plots.R")
 ```
 
 `R/00_build_target_genes.R` reads
-`data/oncogene_shortlist_sjpedpanel.tsv`. If that file is missing in your
-clone (it's gitignored along with the rest of `data/`), copy the version
-shipped under `.scratch/`:
-
-```bash
-mkdir -p data
-cp .scratch/oncogene_shortlist.tsv data/oncogene_shortlist_sjpedpanel.tsv
-```
+`data/oncogene_shortlist_ped_gof_snvs.tsv` by default. If `data/` is
+missing in your clone (gitignored), add that TSV (or copy from
+`.scratch/oncogene_shortlist.tsv` only if you are reproducing the **legacy**
+42-gene panel — then set `SHORTLIST` in `00_build_target_genes.R` to
+`oncogene_shortlist_sjpedpanel.tsv` and rename/copy accordingly).
 
 That's the entire dependency footprint — no Python, no WSL, no conda.
 
@@ -99,19 +105,17 @@ try again.
 │   ├── 00_build_target_genes.R       # builds data/target_genes.tsv
 │   └── 01_profile_inputs.R, ...
 ├── data/
-│   ├── target_genes.tsv              # 42 target oncogenes (single source of truth)
-│   ├── oncogene_shortlist_sjpedpanel.tsv  # tier A/B/C shortlist + per-gene evidence
+│   ├── target_genes.tsv              # 24 target oncogenes (single source of truth)
+│   ├── oncogene_shortlist_ped_gof_snvs.tsv  # default SNV/indel GoF panel (24 genes)
+│   ├── oncogene_shortlist_sjpedpanel.tsv    # legacy 42-gene SJPedPanel-derived list
 │   ├── oncogene_evidence_sjpedpanel.tsv   # full universe (105 genes) with all signals
-│   ├── filter_oncogenes_sjpedpanel.R      # script that derives the shortlist
-│   ├── hotspots_tier0.csv            # curated activating-codon list (10-gene
-│   │                                 #   pilot entries + 42-gene extensions)
+│   ├── filter_oncogenes_sjpedpanel.R      # script that derives the 42-gene shortlist
+│   ├── hotspots_tier0.csv            # curated activating-codon list (pilot + panel)
 │   └── cache/                        # VEP / Ensembl REST cache
 ├── results/
-│   ├── STATUS.md                     # describes both runs (read this first)
-│   ├── pilot_10genes/                # frozen snapshot of yesterday's pilot
-│   │                                 #   (KRAS,NRAS,HRAS,BRAF,PIK3CA,MAP2K1,
-│   │                                 #    EGFR,ERBB2,ALK,CTNNB1)
-│   └── all_42genes/                  # current run; regenerated by 02..07
+│   ├── STATUS.md                     # describes runs (read this first)
+│   ├── pilot_10genes/                # frozen 10-gene pilot snapshot
+│   └── ped_gof_snv/                  # current run; regenerated by 01..07 (and 09/10)
 ├── environment.yml
 ├── environment.lock.yml
 ├── setup_alpha_tools.sh
@@ -119,11 +123,11 @@ try again.
 └── README.md
 ```
 
-`results/` is split per-run so we can keep yesterday's pilot frozen
-while iterating on the bigger gene panel. The active output folder is
-controlled by `RUN_NAME` near the top of each `R/0X_*.R` script
-(currently `"all_42genes"`). To freeze another run, change `RUN_NAME`
-to a new subfolder before re-running 02..07.
+`results/` is split per-run so we can keep the pilot frozen while
+iterating on the panel. The active output folder is controlled by
+`RUN_NAME` near the top of each `R/0X_*.R` script (currently
+`"ped_gof_snv"`). To freeze another run, change `RUN_NAME` to a new
+subfolder before re-running 01..07.
 
 The R pipeline is the project's core analysis path; AlphaMissense and
 the local VEP install are auxiliary layers that the R outputs feed into.
@@ -331,7 +335,7 @@ The numbered scripts in [`R/`](./R) form a linear pipeline. Each script
 reads from `data/` and writes into `results/`. Run them in order:
 
 ```r
-source("R/00_build_target_genes.R")    # build data/target_genes.tsv (42 genes)
+source("R/00_build_target_genes.R")    # build data/target_genes.tsv (24 genes)
 source("R/01_profile_inputs.R")        # sanity-check inputs
 source("R/02_inspect_vaf.R")           # explore VAF, count hits per target locus
 source("R/03_annotate_variants.R")     # VEP REST -> 03_vaf_annotated.tsv
@@ -344,26 +348,22 @@ source("R/07_waterfall_plots.R")       # waterfall PDFs in results/
 ### Target oncogenes — single source of truth
 
 `data/target_genes.tsv` is the **single source of truth** for the
-gene set the rest of the pipeline scans. It is built by
-`R/00_build_target_genes.R` from
-`data/oncogene_shortlist_sjpedpanel.tsv` (42-gene list filtered for
-**gain-of-function relevance** ∩ **pediatric solid/brain tumor
-recurrence**) plus Ensembl REST coordinate lookups. The 42 genes are
-split into three evidence tiers:
+gene set the rest of the pipeline scans. By default,
+`R/00_build_target_genes.R` reads
+`data/oncogene_shortlist_ped_gof_snvs.tsv` (**24 genes**, all tier **A**
+in that file, with per-gene `score` / `evidence_tags`), then adds GRCh38
+coordinates via Ensembl REST. The panel is tuned for **SNV/InDel/MNV
+callsets** (no fusion partners): RAS/MAPK, PI3K–AKT–mTOR, RTKs, WNT,
+selected oncohistones, **FLT3**, etc.
 
-| Tier | n  | Genes |
-| ---- | -- | ----- |
-| A    | 13 | `BRAF, MYCN, CTNNB1, ALK, KIT, IDH1, KRAS, MYC, PIK3CA, PTPN11, ERG, PDGFRA, SMO` |
-| B    | 17 | `EWSR1, DDX3X, CTCF, FOXO1, MET, NTRK3, NUTM1, RELA, ZFTA, FGFR2, FGFR3, CCND2, PAX3, PAX7, YAP1, FLI1, COL1A1` |
-| C    | 12 | `KIAA1549, SS18, TFE3, ASPSCR1, PRKAR2B, SSX1, GLI2, MAMLD1, USP6, H3F3A, GLI1, PPM1D` |
+**24 genes (alphabetical):**  
+`ACVR1, AKT1, ALK, BRAF, CTNNB1, EGFR, FGFR1, FGFR4, FLT3, HRAS, H3F3A, HIST1H3B, HIST1H3C, IDH1, KIT, KRAS, MTOR, MYC, MYCN, NRAS, PDGFRA, PIK3CA, PTPN11, SMO`
 
-All 42 genes pass the SJPedPanel paper's empirical solid/brain
-diagnostic-yield filter (S4C/S4D/S4E ∩ Cancer category in
-`{Solid tumor, Brain tumor}`). See the comment block at the top of
-`data/filter_oncogenes_sjpedpanel.R` for the full filter logic.
-
-To regenerate the shortlist after the supplementary tables update,
-re-run `Rscript data/filter_oncogenes_sjpedpanel.R` and then
+**Legacy 42-gene list:** `data/oncogene_shortlist_sjpedpanel.tsv` (Tier
+A/B/C from SJPedPanel supplementary filtering — Karol et al. 2024) plus
+`data/filter_oncogenes_sjpedpanel.R`. To rebuild that list after table
+updates, run `Rscript data/filter_oncogenes_sjpedpanel.R`, point
+`SHORTLIST` in `00_build_target_genes.R` at that TSV, then
 `Rscript R/00_build_target_genes.R`.
 
 Required R packages: `data.table`, `httr2`, `jsonlite`, `digest`,
@@ -375,14 +375,14 @@ by default and caches responses to `data/cache/`. If you have the local
 VEP install (via `setup_alpha_tools.sh`), you can swap it in for offline
 or large-batch runs.
 
-All scripts write into `results/<RUN_NAME>/` (default `all_42genes`).
-Yesterday's 10-gene pilot is preserved at `results/pilot_10genes/`.
-To re-run with a different gene set, change `RUN_NAME` (and optionally
-the contents of `data/oncogene_shortlist_sjpedpanel.tsv` →
-`data/target_genes.tsv`) before re-running 02..07.
+All scripts write into `results/<RUN_NAME>/` (default `ped_gof_snv`).
+The 10-gene pilot is preserved at `results/pilot_10genes/`. To re-run
+with a different gene set, change `RUN_NAME` and/or the shortlist TSV
+in `00_build_target_genes.R`, rebuild `target_genes.tsv`, then re-run
+01..07.
 
 See [`results/STATUS.md`](./results/STATUS.md) for the side-by-side
-comparison of the two runs and outstanding scientific questions.
+comparison of frozen runs and outstanding scientific questions.
 
 ---
 

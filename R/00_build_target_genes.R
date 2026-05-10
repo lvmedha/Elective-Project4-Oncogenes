@@ -1,10 +1,16 @@
 # 00_build_target_genes.R
 # Build the canonical target_genes table for the rest of the pipeline.
 #
-# Source of the gene list:
-#   - data/oncogene_shortlist_sjpedpanel.tsv  (Tiers A/B/C, 42 genes; output of
-#     filter_oncogenes_sjpedpanel.R parsing the SJPedPanel supp. tables, Karol
-#     et al. 2024, CCR-24-1063).
+# Source of the gene list (set SHORTLIST below):
+#   - data/oncogene_shortlist_ped_gof_snvs.tsv  (DEFAULT)
+#     Curated pediatric solid tumor gain-of-function genes for SNV/indel/MNV
+#     callsets: includes EGFR, full RAS family, FGFR1/4, PI3K–AKT–mTOR, FLT3
+#     (heme + solid RTK context), etc.
+#     Excludes fusion drivers and fusion partners (EWSR1, PAX3/7, SS18, …)
+#     because this project has no fusion calls.
+#   - data/oncogene_shortlist_sjpedpanel.tsv  (legacy 42-gene SJPedPanel-derived
+#     list + filter_oncogenes_sjpedpanel.R) — switch SHORTLIST to this path if
+#     you need the old panel for comparison.
 #
 # This script:
 #   1. Reads the shortlist.
@@ -33,7 +39,7 @@ DATA_DIR  <- file.path(PROJ_DIR, "data")
 CACHE_DIR <- file.path(DATA_DIR, "cache")
 dir.create(CACHE_DIR, showWarnings = FALSE, recursive = TRUE)
 
-SHORTLIST <- file.path(DATA_DIR, "oncogene_shortlist_sjpedpanel.tsv")
+SHORTLIST <- file.path(DATA_DIR, "oncogene_shortlist_ped_gof_snvs.tsv")
 OUT       <- file.path(DATA_DIR, "target_genes.tsv")
 
 stopifnot(file.exists(SHORTLIST))

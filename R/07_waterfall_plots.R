@@ -18,7 +18,7 @@ suppressPackageStartupMessages({
 DOC_DIR  <- "C:/Users/mvijayan/Documents"
 PROJ_DIR <- "C:/Users/mvijayan/Documents/Elective-Project4-Oncogenes"
 DATA_DIR <- file.path(PROJ_DIR, "data")
-RUN_NAME <- "all_42genes"
+RUN_NAME <- "ped_gof_snv"
 OUT_DIR  <- file.path(PROJ_DIR, "results", RUN_NAME)
 dir.create(OUT_DIR, showWarnings = FALSE, recursive = TRUE)
 
@@ -74,6 +74,12 @@ missing_in_cge <- setdiff(target_genes, hugo_only)
 missing_in_cge <- setdiff(missing_in_cge,
                           c(if ("H3F3A" %in% target_genes &
                                 "H3-3A" %in% hugo_only) "H3F3A" else NULL))
+missing_in_cge <- setdiff(missing_in_cge,
+                          c(if ("HIST1H3B" %in% target_genes &
+                                "H3C2" %in% hugo_only) "HIST1H3B" else NULL))
+missing_in_cge <- setdiff(missing_in_cge,
+                          c(if ("HIST1H3C" %in% target_genes &
+                                "H3C3" %in% hugo_only) "HIST1H3C" else NULL))
 if (length(missing_in_cge)) {
   cat("Targets missing in DepMap CGE (will be skipped):",
       paste(missing_in_cge, collapse = ","), "\n")
@@ -90,6 +96,8 @@ old <- copy(colnames(cge))
 new <- c("ModelID", sub(" \\(.*", "", old[-1]))
 new[new == "H3-3A"] <- "H3F3A"
 new[new == "H3-3B"] <- "H3F3B"
+new[new == "H3C2"] <- "HIST1H3B"
+new[new == "H3C3"] <- "HIST1H3C"
 setnames(cge, old, new)
 
 # Pivot from wide (one column per gene) to long (one row per cell-line x
@@ -135,7 +143,22 @@ gene_tier <- setNames(target_table$tier, target_table$gene)
 
 waterfall_one_gene <- function(g, df) {
   d <- df[gene_symbol == g]
-  if (!nrow(d)) return(NULL)
+  if (!nrow(d)) {
+    tier_lab <- if (g %in% names(gene_tier)) paste0(" [Tier ", gene_tier[g], "]") else ""
+    return(
+      ggplot() +
+        annotate("text", x = 0.5, y = 0.5,
+                 label = "No DepMap Chronos (CGE) rows for this symbol.\nCheck hgnc_aliases / DepMap column names.",
+                 size = 3.2, hjust = 0.5, vjust = 0.5) +
+        labs(title = paste0(g, tier_lab, "  ( n=0 cell lines )"),
+             x = NULL, y = "Chronos gene effect") +
+        theme_minimal(base_size = 11) +
+        theme(plot.title = element_text(face = "bold"),
+              panel.grid = element_blank(),
+              axis.text = element_blank(),
+              axis.ticks = element_blank())
+    )
+  }
   # The waterfall ordering: sort cell lines by GeneEffect (most negative
   # first, i.e. most-dependent on the left), then assign an integer x-position
   # via .I (data.table's row-number variable). aes(x = x, ...) then draws
@@ -171,10 +194,11 @@ pdf(file.path(OUT_DIR, "07_waterfalls_pancancer.pdf"),
 n_plotted <- 0L
 for (g in target_genes) {
   p <- waterfall_one_gene(g, plot_dt)
-  if (!is.null(p)) { print(p); n_plotted <- n_plotted + 1L }
+  print(p)
+  n_plotted <- n_plotted + 1L
 }
 invisible(dev.off())
-cat(sprintf("\nWrote: %s (%d / %d genes plotted)\n",
+cat(sprintf("\nWrote: %s (%d / %d genes (one page each))\n",
             file.path(OUT_DIR, "07_waterfalls_pancancer.pdf"),
             n_plotted, length(target_genes)))
 
@@ -186,7 +210,24 @@ plot_dt[, disease := ifelse(is.na(OncotreePrimaryDisease) |
 
 waterfall_facet <- function(g, df, min_n = 5) {
   d <- df[gene_symbol == g]
-  if (!nrow(d)) return(NULL)
+  if (!nrow(d)) {
+    return(
+      ggplot() +
+        annotate("text", x = 0.5, y = 0.5,
+                 label = "No DepMap Chronos (CGE) rows for this symbol.",
+                 size = 3.2, hjust = 0.5, vjust = 0.5) +
+        labs(title = paste0(g,
+                            if (g %in% names(gene_tier))
+                              paste0(" [Tier ", gene_tier[g], "]") else "",
+                            "  -  facet by OncotreePrimaryDisease"),
+             x = NULL, y = "Chronos gene effect") +
+        theme_minimal(base_size = 9) +
+        theme(plot.title = element_text(face = "bold"),
+              panel.grid = element_blank(),
+              axis.text = element_blank(),
+              axis.ticks = element_blank())
+    )
+  }
   # DepMap has ~70 OncotreePrimaryDisease values; if we faceted by all of
   # them most panels would have 1-2 cell lines and be unreadable. Lump any
   # disease with < min_n lines into a single "Other" panel.
@@ -226,10 +267,11 @@ pdf(file.path(OUT_DIR, "07_waterfalls_facet_lineage.pdf"),
 n_plotted <- 0L
 for (g in target_genes) {
   p <- waterfall_facet(g, plot_dt)
-  if (!is.null(p)) { print(p); n_plotted <- n_plotted + 1L }
+  print(p)
+  n_plotted <- n_plotted + 1L
 }
 invisible(dev.off())
-cat(sprintf("Wrote: %s (%d / %d genes plotted)\n",
+cat(sprintf("Wrote: %s (%d / %d genes (one page each))\n",
             file.path(OUT_DIR, "07_waterfalls_facet_lineage.pdf"),
             n_plotted, length(target_genes)))
 

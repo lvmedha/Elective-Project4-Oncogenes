@@ -12,6 +12,10 @@ env/
 # AlphaMissense data / model outputs (often large)
 data/
 *.tsv.gz
+# Local VEP cache + hg38 AlphaMissense table (multi-GB; keep out of git)
+/vep_cache/
+AlphaMissense_hg38.tsv.bgz
+AlphaMissense_hg38.tsv.bgz.tbi
 *.fasta
 *.fa
 msa_output/

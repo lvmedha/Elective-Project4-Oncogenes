@@ -10,7 +10,7 @@ suppressPackageStartupMessages({
 
 PROJ_DIR <- "C:/Users/mvijayan/Documents/Elective-Project4-Oncogenes"
 DATA_DIR <- file.path(PROJ_DIR, "data")
-RUN_NAME <- "all_42genes"
+RUN_NAME <- "ped_gof_snv"
 OUT_DIR  <- file.path(PROJ_DIR, "results", RUN_NAME)
 dir.create(OUT_DIR, showWarnings = FALSE, recursive = TRUE)
 ann <- fread(file.path(OUT_DIR, "03_vaf_annotated.tsv"))

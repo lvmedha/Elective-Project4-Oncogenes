@@ -1,0 +1,47 @@
+09_am_dependency_figures.R summary
+Rows (deduped ACH x variant x gene) with CGE: 340 
+With numeric AlphaMissense: 333 
+
+Per Mut_Status:
+       Mut_Status     N
+           <char> <int>
+1:        Hotspot   263
+2: Missense_Other    77
+
+Per gene (n points):
+    gene_symbol     N
+         <char> <int>
+ 1:        KRAS    97
+ 2:      PIK3CA    59
+ 3:        BRAF    46
+ 4:        NRAS    39
+ 5:         MYC    20
+ 6:      CTNNB1    17
+ 7:      PTPN11    11
+ 8:        HRAS    10
+ 9:         ALK     7
+10:        MTOR     7
+11:        EGFR     7
+12:       H3F3A     5
+13:        FLT3     4
+14:        AKT1     4
+15:         KIT     3
+16:        IDH1     1
+17:       ACVR1     1
+18:      PDGFRA     1
+19:         SMO     1
+
+Spearman rho (AM pathogenicity vs Chronos), missense + AM, n=333:
+
+	Spearman's rank correlation rho
+
+data:  pw$am_pathogenicity and pw$GeneEffect
+S = 6887667, p-value = 0.02969
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+       rho 
+-0.1191662 
+
+
+Interpretation: more negative Chronos = stronger dependency.
+Negative rho means higher AM pathogenicity tracks with stronger dependency.

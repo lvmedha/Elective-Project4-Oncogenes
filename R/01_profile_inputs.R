@@ -13,13 +13,11 @@ suppressPackageStartupMessages({
   library(data.table)
 })
 
-# OUT_DIR is per-run so we can keep yesterday's pilot outputs frozen under
-# results/pilot_10genes/ while regenerating the 42-gene run under
-# results/all_42genes/. Change RUN_NAME to point a fresh re-run at a new
-# subfolder.
+# OUT_DIR is per-run so you can keep e.g. results/all_42genes/ frozen while
+# regenerating results/ped_gof_snv/. Change RUN_NAME to point a fresh re-run.
 DOC_DIR  <- "C:/Users/mvijayan/Documents"
 PROJ_DIR <- "C:/Users/mvijayan/Documents/Elective-Project4-Oncogenes"
-RUN_NAME <- "all_42genes"
+RUN_NAME <- "ped_gof_snv"
 OUT_DIR  <- file.path(PROJ_DIR, "results", RUN_NAME)
 dir.create(OUT_DIR, showWarnings = FALSE, recursive = TRUE)
 

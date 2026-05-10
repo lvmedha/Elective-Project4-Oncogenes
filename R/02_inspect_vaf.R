@@ -12,7 +12,7 @@ DOC_DIR  <- "C:/Users/mvijayan/Documents"
 PROJ_DIR <- "C:/Users/mvijayan/Documents/Elective-Project4-Oncogenes"
 DATA_DIR <- file.path(PROJ_DIR, "data")
 # Per-run output folder. See R/01_profile_inputs.R for the layout rationale.
-RUN_NAME <- "all_42genes"
+RUN_NAME <- "ped_gof_snv"
 OUT_DIR  <- file.path(PROJ_DIR, "results", RUN_NAME)
 dir.create(OUT_DIR, showWarnings = FALSE, recursive = TRUE)
 
