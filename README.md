@@ -28,15 +28,13 @@ current scientific status, see [`results/STATUS.md`](./results/STATUS.md).
 
 ## Do I need Python / WSL / AlphaMissense?
 
-**No — not to run the existing pipeline.** The core R pipeline
-(`R/00..07_*.R`) is self-contained and only needs **R + an internet
-connection** (it calls Ensembl VEP over REST). Python, WSL, conda, and
-AlphaMissense are **optional** and only required if you want to add
-AlphaMissense pathogenicity scores to the tiering step
-(`R/05_apply_hotspot_tiers.R`) — that's a planned enhancement, not a
-current dependency. If you just want to reproduce the existing results,
-skip straight to **TL;DR — R-only quick start** below and ignore the
-WSL / conda / `setup_*.sh` sections entirely.
+**No — not to run the core 00–07 pipeline.** Those steps are self-contained
+and need **R + an internet connection** (Ensembl VEP REST). **Steps 09–11**
+read **AlphaMissense** from a **cohort VCF** produced on the cluster (VEP +
+`--plugin AlphaMissense`); you can regenerate that VCF using
+[`scripts/run_vep_alphamissense.sh`](./scripts/run_vep_alphamissense.sh)
+after `R/08_make_vep_input.R`. Python, WSL, and conda are **optional** and
+only needed for local VEP / AlphaMissense tooling (see below).
 
 The optional **step 08** (`R/08_make_vep_input.R`) is also pure R — it
 re-emits the cohort as a `.vcf` / `.ensembl` pair that a cluster VEP
@@ -47,12 +45,16 @@ this repo (St. Jude HPC), so the only thing you need locally is R.
 
 ## TL;DR — R-only quick start (no Python required)
 
-This is the path most users want. It reproduces everything in
-`results/ped_gof_snv/` (default `RUN_NAME` in `R/01`–`R/07`) using only R.
+This path reproduces tables and figures under `results/ped_gof_snv/`
+(default `RUN_NAME` in the numbered `R/` scripts). **External files** you
+must supply locally are listed under **External inputs** below (VAF table,
+DepMap CSVs, optional PRISM matrices).
 
 ```r
 # From R, in the project root:
 install.packages(c("data.table","httr2","jsonlite","digest","readxl","ggplot2"))
+# Optional: nicer PRISM volcano labels
+install.packages("ggrepel")
 
 source("R/00_build_target_genes.R")    # build data/target_genes.tsv (24 genes)
 source("R/01_profile_inputs.R")
@@ -62,16 +64,28 @@ source("R/04_hotspot_summary.R")
 source("R/05_apply_hotspot_tiers.R")
 source("R/06_link_to_depmap.R")
 source("R/07_waterfall_plots.R")
+
+# Optional: cohort VCF for cluster VEP + AlphaMissense
+# source("R/08_make_vep_input.R")      # -> results/cohort_full/08_vep_input_full.*
+
+# After 09_vep_full_alphamissense.vcf.gz exists under results/cohort_full/:
+source("R/09_am_dependency_figures.R")   # AM vs Chronos PDFs + 09_am_chronos_*.tsv
+
+# Optional: PRISM (expects CSVs under ~/Documents; see R/10 header)
+source("R/10_prism_mutation_sensitivity.R")
+
+# Part 2 triage: unique missense variants + AM + hotspot rules + PDFs
+source("R/11_am_missense_triage_figures.R")
 ```
 
-`R/00_build_target_genes.R` reads
-`data/oncogene_shortlist_ped_gof_snvs.tsv` by default. If `data/` is
-missing in your clone (gitignored), add that TSV (or copy from
-`.scratch/oncogene_shortlist.tsv` only if you are reproducing the **legacy**
-42-gene panel — then set `SHORTLIST` in `00_build_target_genes.R` to
-`oncogene_shortlist_sjpedpanel.tsv` and rename/copy accordingly).
+Panel files **`data/target_genes.tsv`**, **`data/oncogene_shortlist_ped_gof_snvs.tsv`**,
+and **`data/hotspots_tier0.csv`** are **tracked in git**; other `data/*`
+(e.g. `cache/`, large TSVs) stays local. For the **legacy** 42-gene panel,
+set `SHORTLIST` in `00_build_target_genes.R` to `oncogene_shortlist_sjpedpanel.tsv`
+and add that file locally (not tracked by default).
 
-That's the entire dependency footprint — no Python, no WSL, no conda.
+Core **00–07** need only **R + network**. **09/11** need the annotated VCF;
+**10** needs PRISM files on disk.
 
 ---
 
@@ -101,33 +115,35 @@ try again.
 
 ```
 .
-├── R/                                # R analysis pipeline (00..07)
-│   ├── 00_build_target_genes.R       # builds data/target_genes.tsv
-│   └── 01_profile_inputs.R, ...
-├── data/
-│   ├── target_genes.tsv              # 24 target oncogenes (single source of truth)
-│   ├── oncogene_shortlist_ped_gof_snvs.tsv  # default SNV/indel GoF panel (24 genes)
-│   ├── oncogene_shortlist_sjpedpanel.tsv    # legacy 42-gene SJPedPanel-derived list
-│   ├── oncogene_evidence_sjpedpanel.tsv   # full universe (105 genes) with all signals
-│   ├── filter_oncogenes_sjpedpanel.R      # script that derives the 42-gene shortlist
-│   ├── hotspots_tier0.csv            # curated activating-codon list (pilot + panel)
-│   └── cache/                        # VEP / Ensembl REST cache
+├── R/                                # R pipeline 00–11 (see Running section)
+│   ├── 00_build_target_genes.R
+│   ├── 01_profile_inputs.R … 07_waterfall_plots.R
+│   ├── 08_make_vep_input.R           # cohort VCF / Ensembl input
+│   ├── 09_am_dependency_figures.R    # AM vs Chronos (needs annotated VCF)
+│   ├── 10_prism_mutation_sensitivity.R
+│   └── 11_am_missense_triage_figures.R
+├── data/                             # tracked: panel TSV/CSV only (see .gitignore)
+│   ├── target_genes.tsv
+│   ├── oncogene_shortlist_ped_gof_snvs.tsv
+│   ├── hotspots_tier0.csv
+│   └── cache/                        # local VEP REST cache (not in git)
+├── scripts/
+│   ├── run_vep_alphamissense.sh      # cluster / local VEP + AM
+│   └── run_vep_alphamissense_smoke.sh
 ├── results/
-│   ├── STATUS.md                     # describes runs (read this first)
-│   ├── pilot_10genes/                # frozen 10-gene pilot snapshot
-│   └── ped_gof_snv/                  # current run; regenerated by 01..07 (and 09/10)
+│   ├── STATUS.md
+│   ├── cohort_full/                  # whole-cohort VEP input + AM VCF
+│   ├── pilot_10genes/
+│   └── ped_gof_snv/                  # default RUN_NAME outputs
 ├── environment.yml
-├── environment.lock.yml
 ├── setup_alpha_tools.sh
 ├── setup_env.sh
 └── README.md
 ```
 
-`results/` is split per-run so we can keep the pilot frozen while
-iterating on the panel. The active output folder is controlled by
-`RUN_NAME` near the top of each `R/0X_*.R` script (currently
-`"ped_gof_snv"`). To freeze another run, change `RUN_NAME` to a new
-subfolder before re-running 01..07.
+`results/` is split per-run. **`RUN_NAME`** in each script is currently
+`"ped_gof_snv"`. Change it to freeze another run, then re-run **01..07**
+(and **08–11** as needed).
 
 The R pipeline is the project's core analysis path; AlphaMissense and
 the local VEP install are auxiliary layers that the R outputs feed into.
@@ -332,18 +348,36 @@ This is the project's core analysis path and **does not require Python,
 WSL, or conda** — see the R-only TL;DR above for the minimum setup.
 
 The numbered scripts in [`R/`](./R) form a linear pipeline. Each script
-reads from `data/` and writes into `results/`. Run them in order:
+reads from `data/` (and paths documented in **External inputs**) and writes
+into `results/<RUN_NAME>/` (and `results/cohort_full/` for step 08).
 
 ```r
-source("R/00_build_target_genes.R")    # build data/target_genes.tsv (24 genes)
-source("R/01_profile_inputs.R")        # sanity-check inputs
-source("R/02_inspect_vaf.R")           # explore VAF, count hits per target locus
-source("R/03_annotate_variants.R")     # VEP REST -> 03_vaf_annotated.tsv
-source("R/04_hotspot_summary.R")       # per-gene recurrence summary
-source("R/05_apply_hotspot_tiers.R")   # join Tier-0 hotspots, assign Mut_Status
-source("R/06_link_to_depmap.R")        # join DepMap ACH IDs (see STATUS.md)
-source("R/07_waterfall_plots.R")       # waterfall PDFs in results/
+source("R/00_build_target_genes.R")
+source("R/01_profile_inputs.R")
+source("R/02_inspect_vaf.R")
+source("R/03_annotate_variants.R")
+source("R/04_hotspot_summary.R")
+source("R/05_apply_hotspot_tiers.R")
+source("R/06_link_to_depmap.R")
+source("R/07_waterfall_plots.R")
+# source("R/08_make_vep_input.R")              # optional: cohort VEP input
+# After results/cohort_full/09_vep_full_alphamissense.vcf.gz exists:
+source("R/09_am_dependency_figures.R")
+# source("R/10_prism_mutation_sensitivity.R")   # optional: PRISM CSVs
+source("R/11_am_missense_triage_figures.R")     # Part 2 triage (needs same VCF as 09)
 ```
+
+### External inputs (not in this repo)
+
+Paths are configured at the top of each script (default **`C:/Users/mvijayan/Documents`**).
+
+| Input | Used by |
+| --- | --- |
+| Long-format VAF / marker table (`AllMarkers_VAF_long.tsv` or project-specific path) | `01`–`06` |
+| `depmap_CGE.csv`, `depmap_meta.csv` | `06`, `07`, `09` |
+| `samples.txt` (PID ↔ ACH mapping) | `06` |
+| `results/cohort_full/09_vep_full_alphamissense.vcf.gz` | `09`, `11` |
+| `PRISMOncologyReferenceSeqLog2AUCMatrix.csv`, `PRISMOncologyReferenceSeqCompoundList.csv` | `10` |
 
 ### Target oncogenes — single source of truth
 
@@ -367,7 +401,7 @@ updates, run `Rscript data/filter_oncogenes_sjpedpanel.R`, point
 `Rscript R/00_build_target_genes.R`.
 
 Required R packages: `data.table`, `httr2`, `jsonlite`, `digest`,
-`ggplot2`. Install with
+`ggplot2`. Optional: `ggrepel` (volcano labels in `10`). Install with
 `install.packages(c("data.table","httr2","jsonlite","digest","ggplot2"))`.
 
 `R/03_annotate_variants.R` calls the public Ensembl VEP REST endpoint

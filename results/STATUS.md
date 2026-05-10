@@ -133,6 +133,14 @@ with smaller `n`.
    (`Hotspot / Missense_Other / InframeIndel / Truncating / Silent`).
 7. `06_link_to_depmap.R` — joins DepMap ACH IDs via `samples.txt`.
 8. `07_waterfall_plots.R` — waterfall PDFs grouped by tier.
+9. `08_make_vep_input.R` (optional) — whole-cohort VCF / Ensembl input
+   under `results/cohort_full/` for cluster VEP + AlphaMissense.
+10. `09_am_dependency_figures.R` — join AM from annotated VCF to panel
+    missense + Chronos; AM vs dependency figures.
+11. `10_prism_mutation_sensitivity.R` (optional) — PRISM mut vs WT drug
+    tests and volcano PDFs.
+12. `11_am_missense_triage_figures.R` — Part 2 triage (hotspot + AM +
+    recurrence) and summary PDFs.
 
 ### Outputs (per run; same filenames under `pilot_10genes/`, `ped_gof_snv/`, etc.)
 
@@ -148,6 +156,11 @@ with smaller `n`.
   the tier label.
 - `07_effect_sizes.tsv` — per-gene median(Hotspot) − median(WT) and
   median(any-mut) − median(WT) deltas.
+- `09_am_chronos_per_event.tsv`, `09_*.pdf` — AlphaMissense vs Chronos
+  (after cohort VCF is available).
+- `10_prism_*.tsv`, `10_prism_volcano_*.pdf` — PRISM (optional).
+- `11_am_missense_triage.tsv`, `11_am_*.pdf`, `11_am_triage_README.txt` —
+  missense triage for Part 2.
 
 ---
 
@@ -188,8 +201,10 @@ DepMap's `OmicsFusions.csv` join into `06_link_to_depmap.R`.
 
 ### 5. AlphaMissense layer
 
-Not yet integrated. Once 1 is resolved we can layer
-`AlphaMissense_aa_substitutions.tsv.gz` onto the
-`(transcript_id, protein_start, aa_alt)` key in
-`results/<run>/03_vaf_annotated.tsv`. Then we'll have the AM tier
-alongside the Tier-0 tier and can do the AM-evaluation analysis.
+**Integrated** for cohort variants via cluster **VEP + AlphaMissense**
+(`results/cohort_full/09_vep_full_alphamissense.vcf.gz`), joined by
+`(chrom, pos, ref, alt, gene)` in `R/09_am_dependency_figures.R` (AM vs
+Chronos) and `R/11_am_missense_triage_figures.R` (Part 2 triage tables
+and figures). Optional future work: precomputed
+`AlphaMissense_hg38.tsv.gz` joins on `(transcript_id, protein_start,
+aa_alt)` for offline annotation without re-running VEP.

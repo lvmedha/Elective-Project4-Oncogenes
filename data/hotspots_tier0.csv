@@ -1,0 +1,111 @@
+gene,codon,hgvsp_pattern,note,source
+KRAS,12,p.G12.,canonical RAS GTPase hotspot,OncoKB/COSMIC
+KRAS,13,p.G13.,canonical RAS GTPase hotspot,OncoKB/COSMIC
+KRAS,61,p.Q61.,canonical RAS GTPase hotspot,OncoKB/COSMIC
+KRAS,117,p.K117.,activating low-frequency hotspot,OncoKB
+KRAS,146,p.A146.,activating low-frequency hotspot,OncoKB
+NRAS,12,p.G12.,canonical RAS GTPase hotspot,OncoKB/COSMIC
+NRAS,13,p.G13.,canonical RAS GTPase hotspot,OncoKB/COSMIC
+NRAS,61,p.Q61.,canonical RAS GTPase hotspot,OncoKB/COSMIC
+NRAS,146,p.A146.,activating low-frequency hotspot,OncoKB
+HRAS,12,p.G12.,canonical RAS GTPase hotspot,OncoKB/COSMIC
+HRAS,13,p.G13.,canonical RAS GTPase hotspot,OncoKB/COSMIC
+HRAS,61,p.Q61.,canonical RAS GTPase hotspot,OncoKB/COSMIC
+HRAS,146,p.A146.,activating low-frequency hotspot,OncoKB
+BRAF,600,p.V600.,canonical BRAF activating hotspot (V600E etc),OncoKB/COSMIC
+BRAF,601,p.K601.,activator-loop hotspot,OncoKB
+BRAF,597,p.L597.,activator-loop hotspot,OncoKB
+BRAF,596,p.G596.,P-loop / activation segment,OncoKB
+BRAF,594,p.D594.,kinase-impaired but RAS-dependent activator,OncoKB
+BRAF,469,p.G469.,P-loop hotspot,OncoKB
+BRAF,466,p.G466.,P-loop hotspot,OncoKB
+BRAF,581,p.N581.,kinase-domain hotspot,OncoKB
+PIK3CA,542,p.E542.,helical-domain hotspot,OncoKB/COSMIC
+PIK3CA,545,p.E545.,helical-domain hotspot,OncoKB/COSMIC
+PIK3CA,546,p.Q546.,helical-domain hotspot,OncoKB
+PIK3CA,1047,p.H1047.,kinase-domain hotspot,OncoKB/COSMIC
+PIK3CA,1043,p.M1043.,kinase-domain hotspot,OncoKB
+PIK3CA,88,p.R88.,ABD-domain hotspot,OncoKB
+PIK3CA,420,p.C420.,C2-domain hotspot,OncoKB
+PIK3CA,110,p.G110.,ABD/RBD hotspot,OncoKB
+MAP2K1,53,p.F53.,activating hotspot (RASopathy/cancer),OncoKB
+MAP2K1,56,p.Q56.,activating hotspot,OncoKB
+MAP2K1,57,p.K57.,activating hotspot,OncoKB
+MAP2K1,67,p.D67.,activating hotspot,OncoKB
+MAP2K1,124,p.P124.,activating hotspot,OncoKB
+MAP2K1,203,p.E203.,activating hotspot,OncoKB
+EGFR,719,p.G719.,kinase-domain hotspot,OncoKB
+EGFR,768,p.S768.,kinase-domain hotspot,OncoKB
+EGFR,790,p.T790.,gatekeeper (resistance/activating),OncoKB
+EGFR,858,p.L858.,canonical lung adeno hotspot,OncoKB/COSMIC
+EGFR,861,p.L861.,kinase-domain hotspot,OncoKB
+ERBB2,310,p.S310.,extracellular-domain hotspot,OncoKB
+ERBB2,755,p.L755.,kinase-domain hotspot,OncoKB
+ERBB2,777,p.V777.,kinase-domain hotspot,OncoKB
+ERBB2,842,p.V842.,kinase-domain hotspot,OncoKB
+ERBB2,869,p.L869.,kinase-domain hotspot,OncoKB
+ALK,1174,p.F1174.,canonical NBL ALK hotspot,OncoKB/Mosse2008
+ALK,1196,p.L1196.,kinase-domain hotspot,OncoKB
+ALK,1245,p.F1245.,canonical NBL ALK hotspot,OncoKB
+ALK,1275,p.R1275.,canonical NBL ALK hotspot,OncoKB/Mosse2008
+ALK,1170,p.I1170.,kinase-domain hotspot,OncoKB
+CTNNB1,32,p.D32.,exon-3 GSK3b phosphodegron,OncoKB/COSMIC
+CTNNB1,33,p.S33.,exon-3 GSK3b phosphodegron,OncoKB/COSMIC
+CTNNB1,34,p.G34.,exon-3 GSK3b phosphodegron,OncoKB/COSMIC
+CTNNB1,35,p.I35.,exon-3 GSK3b phosphodegron,OncoKB
+CTNNB1,37,p.S37.,exon-3 GSK3b phosphodegron,OncoKB/COSMIC
+CTNNB1,41,p.T41.,exon-3 GSK3b phosphodegron,OncoKB/COSMIC
+CTNNB1,45,p.S45.,exon-3 GSK3b phosphodegron,OncoKB/COSMIC
+IDH1,132,p.R132.,canonical activating hotspot (LGG/HGG/AML),OncoKB/COSMIC
+FLT3,835,p.D835.,TKD activation-loop hotspot (AML),OncoKB/COSMIC
+FLT3,836,p.I836.,TKD activation-loop hotspot (AML),OncoKB/COSMIC
+KIT,816,p.D816.,canonical activating hotspot (mastocytosis/AML),OncoKB/COSMIC
+KIT,820,p.D820.,kinase activation loop,OncoKB
+KIT,557,p.W557.,exon-11 juxtamembrane (GIST),OncoKB/COSMIC
+KIT,559,p.V559.,exon-11 juxtamembrane (GIST),OncoKB/COSMIC
+KIT,560,p.V560.,exon-11 juxtamembrane (GIST),OncoKB
+KIT,642,p.K642.,exon-13 hotspot,OncoKB
+PDGFRA,842,p.D842.,exon-18 kinase activation loop (GIST),OncoKB/COSMIC
+PDGFRA,561,p.V561.,exon-12 hotspot,OncoKB
+SMO,535,p.W535.,canonical activating hotspot (BCC/MB),OncoKB
+SMO,562,p.E562.,kinase-domain hotspot,OncoKB
+SMO,533,p.S533.,activating hotspot,OncoKB
+PTPN11,72,p.D72.,N-SH2 hotspot (Noonan/JMML),OncoKB
+PTPN11,76,p.E76.,N-SH2 hotspot (Noonan/JMML/cancer),OncoKB/COSMIC
+PTPN11,503,p.A503.,PTP domain hotspot,OncoKB
+PTPN11,506,p.M506.,PTP domain hotspot,OncoKB
+PTPN11,507,p.T507.,PTP domain hotspot,OncoKB
+PTPN11,508,p.G508.,PTP domain hotspot,OncoKB
+FGFR1,546,p.N546.,kinase-domain hotspot (LGG),OncoKB
+FGFR1,656,p.K656.,kinase-domain hotspot,OncoKB
+FGFR2,252,p.S252.,Apert/Pfeiffer extracellular activating hotspot,OncoKB
+FGFR2,253,p.P253.,extracellular Ig hotspot,OncoKB
+FGFR2,549,p.K549.,kinase-domain hotspot,OncoKB
+FGFR2,659,p.K659.,kinase-domain hotspot,OncoKB
+FGFR3,248,p.R248.,extracellular activating hotspot,OncoKB/COSMIC
+FGFR3,249,p.S249.,extracellular activating hotspot,OncoKB/COSMIC
+FGFR3,373,p.Y373.,transmembrane activating hotspot,OncoKB
+FGFR3,650,p.K650.,kinase-domain hotspot,OncoKB
+FGFR3,652,p.K652.,kinase-domain hotspot,OncoKB
+MET,1010,p.N1010.,exon-14-skipping residue,OncoKB
+MET,1112,p.Y1112.,kinase-domain hotspot,OncoKB
+MET,1268,p.M1268.,kinase-domain hotspot,OncoKB
+MYCN,44,p.P44.,recurrent activating hotspot (MB-A),OncoKB
+MYCN,45,p.P45.,recurrent activating hotspot,OncoKB
+MYC,58,p.T58.,phosphodegron-stabilizing hotspot,OncoKB
+H3F3A,28,p.K28.,K27M canonical pHGG/DIPG defining hotspot,OncoKB/COSMIC
+H3F3A,35,p.G35.,G34R/V hemispheric pHGG hotspot,OncoKB/COSMIC
+H3F3A,37,p.K37.,K36M chondroblastoma hotspot,OncoKB
+PPM1D,422,p.R422.,truncating GoF in last exon (DIPG/ependymoma),OncoKB
+PPM1D,427,p.R427.,truncating GoF in last exon,OncoKB
+PPM1D,458,p.R458.,truncating GoF in last exon,OncoKB
+PPM1D,478,p.R478.,truncating GoF in last exon,OncoKB
+NTRK3,623,p.G623.,kinase-domain hotspot,OncoKB
+DDX3X,326,p.R326.,recurrent in MB-WNT,OncoKB
+DDX3X,376,p.R376.,recurrent in MB-WNT,OncoKB
+DDX3X,534,p.R534.,recurrent in MB-WNT,OncoKB
+CTCF,377,p.R377.,zinc-finger hotspot,OncoKB
+CTCF,448,p.R448.,zinc-finger hotspot,OncoKB
+YAP1,127,p.S127.,Hippo-pathway phosphodegron,literature
+GLI1,408,p.D408.,activating mutation,literature
+GLI2,408,p.D408.,activating (Hh-pathway) mutation,literature

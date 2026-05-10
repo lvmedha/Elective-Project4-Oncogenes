@@ -1,0 +1,218 @@
+gene_symbol	Marker_hg38	HGVSp_Short	n_patients	Mut_Status	am_pathogenicity	am_class	is_hotspot	triage_bucket	gene_f	triage_f	mut_lab	has_am_score
+MTOR	chr1.11114338.A.C	p.L2427R	1	Missense_Other	0.9954	likely_pathogenic	FALSE	strong_candidate	MTOR	Strong candidate	Missense_Other	TRUE
+MTOR	chr1.11122094.G.A	p.T2232I	1	Missense_Other	0.8227	likely_pathogenic	FALSE	strong_candidate	MTOR	Strong candidate	Missense_Other	TRUE
+MTOR	chr1.11124516.G.A	p.S2215F	3	Missense_Other	0.9248	likely_pathogenic	FALSE	strong_candidate	MTOR	Strong candidate	Missense_Other	TRUE
+MTOR	chr1.11124516.G.T	p.S2215Y	1	Missense_Other	0.9049	likely_pathogenic	FALSE	strong_candidate	MTOR	Strong candidate	Missense_Other	TRUE
+MTOR	chr1.11128096.T.C	p.K1981E	1	Missense_Other	0.9866	likely_pathogenic	FALSE	strong_candidate	MTOR	Strong candidate	Missense_Other	TRUE
+MTOR	chr1.11128107.G.A	p.T1977I	1	Missense_Other	0.9051	likely_pathogenic	FALSE	strong_candidate	MTOR	Strong candidate	Missense_Other	TRUE
+MTOR	chr1.11128117.A.G	p.Y1974H	1	Missense_Other	0.9894	likely_pathogenic	FALSE	strong_candidate	MTOR	Strong candidate	Missense_Other	TRUE
+MTOR	chr1.11128521.G.A	p.T1948M	1	Missense_Other	0.6099	likely_pathogenic	FALSE	strong_candidate	MTOR	Strong candidate	Missense_Other	TRUE
+MTOR	chr1.11130740.A.C	p.V1801G	1	Missense_Other	0.9271	likely_pathogenic	FALSE	strong_candidate	MTOR	Strong candidate	Missense_Other	TRUE
+MTOR	chr1.11130747.C.T	p.E1799K	1	Missense_Other	0.9742	likely_pathogenic	FALSE	strong_candidate	MTOR	Strong candidate	Missense_Other	TRUE
+MTOR	chr1.11157173.C.T	p.C1483Y	1	Missense_Other	0.998	likely_pathogenic	FALSE	strong_candidate	MTOR	Strong candidate	Missense_Other	TRUE
+MTOR	chr1.11157255.A.T	p.W1456R	2	Missense_Other	0.9995	likely_pathogenic	FALSE	strong_candidate	MTOR	Strong candidate	Missense_Other	TRUE
+MTOR	chr1.11253914.C.A	p.M255I	2	Missense_Other	0.2514	likely_benign	FALSE	likely_weak	MTOR	Likely weak / tolerated	Missense_Other	TRUE
+NRAS	chr1.114709583.C.T	p.A146T	2	Hotspot	0.994	likely_pathogenic	TRUE	strong_candidate	NRAS	Strong candidate	Hotspot	TRUE
+NRAS	chr1.114713818.G.A	p.A91V	1	Missense_Other	0.1434	likely_benign	FALSE	likely_weak	NRAS	Likely weak / tolerated	Missense_Other	TRUE
+NRAS	chr1.114713907.T.A	p.Q61H	3	Hotspot	0.9987	likely_pathogenic	TRUE	strong_candidate	NRAS	Strong candidate	Hotspot	TRUE
+NRAS	chr1.114713907.T.G	p.Q61H	2	Hotspot	0.9987	likely_pathogenic	TRUE	strong_candidate	NRAS	Strong candidate	Hotspot	TRUE
+NRAS	chr1.114713908.T.A	p.Q61L	10	Hotspot	0.9741	likely_pathogenic	TRUE	strong_candidate	NRAS	Strong candidate	Hotspot	TRUE
+NRAS	chr1.114713908.T.C	p.Q61R	8	Hotspot	0.9912	likely_pathogenic	TRUE	strong_candidate	NRAS	Strong candidate	Hotspot	TRUE
+NRAS	chr1.114713908.T.G	p.Q61P	2	Hotspot	0.9979	likely_pathogenic	TRUE	strong_candidate	NRAS	Strong candidate	Hotspot	TRUE
+NRAS	chr1.114713909.G.T	p.Q61K	25	Hotspot	0.9853	likely_pathogenic	TRUE	strong_candidate	NRAS	Strong candidate	Hotspot	TRUE
+NRAS	chr1.114716123.C.A	p.G13V	2	Hotspot	0.9971	likely_pathogenic	TRUE	strong_candidate	NRAS	Strong candidate	Hotspot	TRUE
+NRAS	chr1.114716123.C.T	p.G13D	5	Hotspot	0.9989	likely_pathogenic	TRUE	strong_candidate	NRAS	Strong candidate	Hotspot	TRUE
+NRAS	chr1.114716126.C.A	p.G12V	2	Hotspot	0.9966	likely_pathogenic	TRUE	strong_candidate	NRAS	Strong candidate	Hotspot	TRUE
+NRAS	chr1.114716126.C.G	p.G12A	1	Hotspot	0.9762	likely_pathogenic	TRUE	strong_candidate	NRAS	Strong candidate	Hotspot	TRUE
+NRAS	chr1.114716126.C.T	p.G12D	16	Hotspot	0.9987	likely_pathogenic	TRUE	strong_candidate	NRAS	Strong candidate	Hotspot	TRUE
+NRAS	chr1.114716127.C.A	p.G12C	6	Hotspot	0.9987	likely_pathogenic	TRUE	strong_candidate	NRAS	Strong candidate	Hotspot	TRUE
+NRAS	chr1.114716127.C.T	p.G12S	5	Hotspot	0.9918	likely_pathogenic	TRUE	strong_candidate	NRAS	Strong candidate	Hotspot	TRUE
+H3F3A	chr1.226064434.A.G	p.K28R	1	Hotspot			TRUE	strong_candidate	H3F3A	Strong candidate	Hotspot	FALSE
+H3F3A	chr1.226064434.A.T	p.K28M	12	Hotspot			TRUE	strong_candidate	H3F3A	Strong candidate	Hotspot	FALSE
+H3F3A	chr1.226064454.G.T	p.G35W	1	Hotspot			TRUE	strong_candidate	H3F3A	Strong candidate	Hotspot	FALSE
+H3F3A	chr1.226064455.G.T	p.G35V	1	Hotspot			TRUE	strong_candidate	H3F3A	Strong candidate	Hotspot	FALSE
+H3F3A	chr1.226065675.C.T	p.R50C	2	Missense_Other			FALSE	strong_candidate	H3F3A	Strong candidate	Missense_Other	FALSE
+H3F3A	chr1.226065733.A.G	p.Q69R	1	Missense_Other			FALSE	uncertain	H3F3A	Uncertain	Missense_Other	FALSE
+HRAS	chr11.533503.C.A	p.A134S	1	Missense_Other	0.2837	likely_benign	FALSE	likely_weak	HRAS	Likely weak / tolerated	Missense_Other	TRUE
+HRAS	chr11.533535.C.T	p.R123H	1	Missense_Other	0.6378	likely_pathogenic	FALSE	strong_candidate	HRAS	Strong candidate	Missense_Other	TRUE
+HRAS	chr11.533812.A.G	p.F82L	1	Missense_Other	0.9994	likely_pathogenic	FALSE	strong_candidate	HRAS	Strong candidate	Missense_Other	TRUE
+HRAS	chr11.533833.C.G	p.G75R	1	Missense_Other	0.9991	likely_pathogenic	FALSE	strong_candidate	HRAS	Strong candidate	Missense_Other	TRUE
+HRAS	chr11.533839.G.A	p.R73C	1	Missense_Other	0.9949	likely_pathogenic	FALSE	strong_candidate	HRAS	Strong candidate	Missense_Other	TRUE
+HRAS	chr11.533873.C.A	p.Q61H	1	Hotspot	0.9989	likely_pathogenic	TRUE	strong_candidate	HRAS	Strong candidate	Hotspot	TRUE
+HRAS	chr11.533874.T.A	p.Q61L	2	Hotspot	0.9779	likely_pathogenic	TRUE	strong_candidate	HRAS	Strong candidate	Hotspot	TRUE
+HRAS	chr11.533875.G.T	p.Q61K	1	Hotspot	0.9878	likely_pathogenic	TRUE	strong_candidate	HRAS	Strong candidate	Hotspot	TRUE
+HRAS	chr11.534286.C.G	p.G13R	1	Hotspot	0.998	likely_pathogenic	TRUE	strong_candidate	HRAS	Strong candidate	Hotspot	TRUE
+HRAS	chr11.534286.C.T	p.G13S	2	Hotspot	0.9793	likely_pathogenic	TRUE	strong_candidate	HRAS	Strong candidate	Hotspot	TRUE
+HRAS	chr11.534288.C.A	p.G12V	2	Hotspot	0.9954	likely_pathogenic	TRUE	strong_candidate	HRAS	Strong candidate	Hotspot	TRUE
+HRAS	chr11.534288.C.T	p.G12D	1	Hotspot	0.9981	likely_pathogenic	TRUE	strong_candidate	HRAS	Strong candidate	Hotspot	TRUE
+KRAS	chr12.25225627.G.A	p.A146V	1	Hotspot	0.993	likely_pathogenic	TRUE	strong_candidate	KRAS	Strong candidate	Hotspot	TRUE
+KRAS	chr12.25225628.C.G	p.A146P	2	Hotspot	0.9965	likely_pathogenic	TRUE	strong_candidate	KRAS	Strong candidate	Hotspot	TRUE
+KRAS	chr12.25225628.C.T	p.A146T	3	Hotspot	0.9895	likely_pathogenic	TRUE	strong_candidate	KRAS	Strong candidate	Hotspot	TRUE
+KRAS	chr12.25225713.T.G	p.K117N	1	Hotspot	0.9996	likely_pathogenic	TRUE	strong_candidate	KRAS	Strong candidate	Hotspot	TRUE
+KRAS	chr12.25227341.T.A	p.Q61H	2	Hotspot	0.9977	likely_pathogenic	TRUE	strong_candidate	KRAS	Strong candidate	Hotspot	TRUE
+KRAS	chr12.25227341.T.G	p.Q61H	3	Hotspot	0.9977	likely_pathogenic	TRUE	strong_candidate	KRAS	Strong candidate	Hotspot	TRUE
+KRAS	chr12.25227342.T.A	p.Q61L	2	Hotspot	0.9647	likely_pathogenic	TRUE	strong_candidate	KRAS	Strong candidate	Hotspot	TRUE
+KRAS	chr12.25227342.T.C	p.Q61R	1	Hotspot	0.9866	likely_pathogenic	TRUE	strong_candidate	KRAS	Strong candidate	Hotspot	TRUE
+KRAS	chr12.25227343.G.T	p.Q61K	1	Hotspot	0.9779	likely_pathogenic	TRUE	strong_candidate	KRAS	Strong candidate	Hotspot	TRUE
+KRAS	chr12.25227348.G.C	p.A59G	1	Missense_Other	0.9813	likely_pathogenic	FALSE	strong_candidate	KRAS	Strong candidate	Missense_Other	TRUE
+KRAS	chr12.25227349.C.T	p.A59T	1	Missense_Other	0.9964	likely_pathogenic	FALSE	strong_candidate	KRAS	Strong candidate	Missense_Other	TRUE
+KRAS	chr12.25245277.T.C	p.I36M	1	Missense_Other	0.9755	likely_pathogenic	FALSE	strong_candidate	KRAS	Strong candidate	Missense_Other	TRUE
+KRAS	chr12.25245317.A.C	p.L23R	2	Missense_Other	0.9836	likely_pathogenic	FALSE	strong_candidate	KRAS	Strong candidate	Missense_Other	TRUE
+KRAS	chr12.25245332.G.T	p.A18D	1	Missense_Other	0.9993	likely_pathogenic	FALSE	strong_candidate	KRAS	Strong candidate	Missense_Other	TRUE
+KRAS	chr12.25245345.C.G	p.V14L	1	Missense_Other	0.998	likely_pathogenic	FALSE	strong_candidate	KRAS	Strong candidate	Missense_Other	TRUE
+KRAS	chr12.25245345.C.T	p.V14I	1	Missense_Other	0.8548	likely_pathogenic	FALSE	strong_candidate	KRAS	Strong candidate	Missense_Other	TRUE
+KRAS	chr12.25245347.C.T	p.G13D	10	Hotspot	0.998	likely_pathogenic	TRUE	strong_candidate	KRAS	Strong candidate	Hotspot	TRUE
+KRAS	chr12.25245348.C.A	p.G13C	1	Hotspot	0.9889	likely_pathogenic	TRUE	strong_candidate	KRAS	Strong candidate	Hotspot	TRUE
+KRAS	chr12.25245350.C.A	p.G12V	29	Hotspot	0.9949	likely_pathogenic	TRUE	strong_candidate	KRAS	Strong candidate	Hotspot	TRUE
+KRAS	chr12.25245350.C.G	p.G12A	5	Hotspot	0.9575	likely_pathogenic	TRUE	strong_candidate	KRAS	Strong candidate	Hotspot	TRUE
+KRAS	chr12.25245350.C.T	p.G12D	38	Hotspot	0.9984	likely_pathogenic	TRUE	strong_candidate	KRAS	Strong candidate	Hotspot	TRUE
+KRAS	chr12.25245351.C.A	p.G12C	17	Hotspot	0.9975	likely_pathogenic	TRUE	strong_candidate	KRAS	Strong candidate	Hotspot	TRUE
+KRAS	chr12.25245351.C.G	p.G12R	7	Hotspot	0.9977	likely_pathogenic	TRUE	strong_candidate	KRAS	Strong candidate	Hotspot	TRUE
+KRAS	chr12.25245351.C.T	p.G12S	3	Hotspot	0.985	likely_pathogenic	TRUE	strong_candidate	KRAS	Strong candidate	Hotspot	TRUE
+KRAS	chr12.25245360.C.T	p.V9I	1	Missense_Other	0.5632	ambiguous	FALSE	uncertain	KRAS	Uncertain	Missense_Other	TRUE
+PTPN11	chr12.112450358.G.C	p.G60R	2	Missense_Other	0.9993	likely_pathogenic	FALSE	strong_candidate	PTPN11	Strong candidate	Missense_Other	TRUE
+PTPN11	chr12.112450362.A.T	p.D61V	2	Missense_Other	0.9993	likely_pathogenic	FALSE	strong_candidate	PTPN11	Strong candidate	Missense_Other	TRUE
+PTPN11	chr12.112450364.T.C	p.Y62H	1	Missense_Other	0.9822	likely_pathogenic	FALSE	strong_candidate	PTPN11	Strong candidate	Missense_Other	TRUE
+PTPN11	chr12.112450385.G.A	p.E69K	1	Missense_Other	0.9977	likely_pathogenic	FALSE	strong_candidate	PTPN11	Strong candidate	Missense_Other	TRUE
+PTPN11	chr12.112450393.T.A	p.F71L	1	Missense_Other	1	likely_pathogenic	FALSE	strong_candidate	PTPN11	Strong candidate	Missense_Other	TRUE
+PTPN11	chr12.112450394.G.T	p.A72S	1	Hotspot	0.9164	likely_pathogenic	TRUE	strong_candidate	PTPN11	Strong candidate	Hotspot	TRUE
+PTPN11	chr12.112450395.C.A	p.A72D	1	Hotspot	0.9999	likely_pathogenic	TRUE	strong_candidate	PTPN11	Strong candidate	Hotspot	TRUE
+PTPN11	chr12.112450395.C.T	p.A72V	1	Hotspot	0.9991	likely_pathogenic	TRUE	strong_candidate	PTPN11	Strong candidate	Hotspot	TRUE
+PTPN11	chr12.112450407.A.G	p.E76G	1	Hotspot	0.997	likely_pathogenic	TRUE	strong_candidate	PTPN11	Strong candidate	Hotspot	TRUE
+PTPN11	chr12.112453287.G.A	p.S142N	1	Missense_Other	0.8734	likely_pathogenic	FALSE	strong_candidate	PTPN11	Strong candidate	Missense_Other	TRUE
+PTPN11	chr12.112488466.C.T	p.T468M	1	Missense_Other	0.9945	likely_pathogenic	FALSE	strong_candidate	PTPN11	Strong candidate	Missense_Other	TRUE
+PTPN11	chr12.112489080.T.C	p.S502P	2	Missense_Other	0.9848	likely_pathogenic	FALSE	strong_candidate	PTPN11	Strong candidate	Missense_Other	TRUE
+PTPN11	chr12.112489081.C.T	p.S502L	2	Missense_Other	0.9989	likely_pathogenic	FALSE	strong_candidate	PTPN11	Strong candidate	Missense_Other	TRUE
+PTPN11	chr12.112489106.G.T	p.Q510H	1	Missense_Other	0.9999	likely_pathogenic	FALSE	strong_candidate	PTPN11	Strong candidate	Missense_Other	TRUE
+PTPN11	chr12.112489111.G.C	p.R512P	1	Missense_Other	0.9991	likely_pathogenic	FALSE	strong_candidate	PTPN11	Strong candidate	Missense_Other	TRUE
+FLT3	chr13.28004143.T.C	p.E964G	2	Missense_Other	0.0734	likely_benign	FALSE	likely_weak	FLT3	Likely weak / tolerated	Missense_Other	TRUE
+FLT3	chr13.28018493.C.T	p.D839N	1	Missense_Other	0.5007	ambiguous	FALSE	uncertain	FLT3	Uncertain	Missense_Other	TRUE
+FLT3	chr13.28018505.C.G	p.D835H	1	Hotspot	0.9725	likely_pathogenic	TRUE	strong_candidate	FLT3	Strong candidate	Hotspot	TRUE
+FLT3	chr13.28018516.C.T	p.G831E	3	Missense_Other	0.998	likely_pathogenic	FALSE	strong_candidate	FLT3	Strong candidate	Missense_Other	TRUE
+FLT3	chr13.28028192.G.A	p.A680V	1	Missense_Other	0.8871	likely_pathogenic	FALSE	strong_candidate	FLT3	Strong candidate	Missense_Other	TRUE
+FLT3	chr13.28034123.T.A	p.Y599F	1	Missense_Other	0.4679	ambiguous	FALSE	uncertain	FLT3	Uncertain	Missense_Other	TRUE
+FLT3	chr13.28049407.T.G	p.Q338P	1	Missense_Other	0.4524	ambiguous	FALSE	uncertain	FLT3	Uncertain	Missense_Other	TRUE
+AKT1	chr14.104780111.G.A	p.P51L	1	Missense_Other	0.8458	likely_pathogenic	FALSE	strong_candidate	AKT1	Strong candidate	Missense_Other	TRUE
+AKT1	chr14.104780118.C.T	p.E49K	1	Missense_Other	0.2346	likely_benign	FALSE	likely_weak	AKT1	Likely weak / tolerated	Missense_Other	TRUE
+AKT1	chr14.104780145.C.T	p.E40K	1	Missense_Other	0.7549	likely_pathogenic	FALSE	strong_candidate	AKT1	Strong candidate	Missense_Other	TRUE
+AKT1	chr14.104780214.C.T	p.E17K	1	Missense_Other	0.9977	likely_pathogenic	FALSE	strong_candidate	AKT1	Strong candidate	Missense_Other	TRUE
+MYCN	chr2.15942195.C.T	p.P44L	2	Hotspot	0.8961	likely_pathogenic	TRUE	strong_candidate	MYCN	Strong candidate	Hotspot	TRUE
+ALK	chr2.29209798.C.T	p.R1275Q	4	Hotspot	0.9906	likely_pathogenic	TRUE	strong_candidate	ALK	Strong candidate	Hotspot	TRUE
+ALK	chr2.29213994.A.C	p.F1245V	1	Hotspot	0.996	likely_pathogenic	TRUE	strong_candidate	ALK	Strong candidate	Hotspot	TRUE
+ALK	chr2.29220829.G.T	p.F1174L	6	Hotspot	0.9997	likely_pathogenic	TRUE	strong_candidate	ALK	Strong candidate	Hotspot	TRUE
+ALK	chr2.29383831.G.A	p.R395C	1	Missense_Other	0.2196	likely_benign	FALSE	likely_weak	ALK	Likely weak / tolerated	Missense_Other	TRUE
+ACVR1	chr2.157770368.C.T	p.G264S	1	Missense_Other	0.542	ambiguous	FALSE	uncertain	ACVR1	Uncertain	Missense_Other	TRUE
+ACVR1	chr2.157774114.C.T	p.R206H	3	Missense_Other	0.9581	likely_pathogenic	FALSE	strong_candidate	ACVR1	Strong candidate	Missense_Other	TRUE
+ACVR1	chr2.157774115.G.A	p.R206C	1	Missense_Other	0.9855	likely_pathogenic	FALSE	strong_candidate	ACVR1	Strong candidate	Missense_Other	TRUE
+IDH1	chr2.208248388.C.T	p.R132H	1	Hotspot	0.992	likely_pathogenic	TRUE	strong_candidate	IDH1	Strong candidate	Hotspot	TRUE
+IDH1	chr2.208248389.G.A	p.R132C	1	Hotspot	0.9873	likely_pathogenic	TRUE	strong_candidate	IDH1	Strong candidate	Hotspot	TRUE
+CTNNB1	chr3.41224529.A.G	p.D6G	1	Missense_Other	0.6561	likely_pathogenic	FALSE	strong_candidate	CTNNB1	Strong candidate	Missense_Other	TRUE
+CTNNB1	chr3.41224544.A.G	p.D11G	1	Missense_Other	0.5519	ambiguous	FALSE	uncertain	CTNNB1	Uncertain	Missense_Other	TRUE
+CTNNB1	chr3.41224589.A.G	p.Q26R	1	Missense_Other	0.7746	likely_pathogenic	FALSE	strong_candidate	CTNNB1	Strong candidate	Missense_Other	TRUE
+CTNNB1	chr3.41224606.G.A	p.D32N	1	Hotspot	0.9888	likely_pathogenic	TRUE	strong_candidate	CTNNB1	Strong candidate	Hotspot	TRUE
+CTNNB1	chr3.41224607.A.T	p.D32V	1	Hotspot	0.9985	likely_pathogenic	TRUE	strong_candidate	CTNNB1	Strong candidate	Hotspot	TRUE
+CTNNB1	chr3.41224610.C.A	p.S33Y	1	Hotspot	0.9958	likely_pathogenic	TRUE	strong_candidate	CTNNB1	Strong candidate	Hotspot	TRUE
+CTNNB1	chr3.41224611.TGGA.TTTA	p.SG33SL	1	Hotspot			TRUE	strong_candidate	CTNNB1	Strong candidate	Hotspot	FALSE
+CTNNB1	chr3.41224613.G.A	p.G34E	1	Hotspot	0.9996	likely_pathogenic	TRUE	strong_candidate	CTNNB1	Strong candidate	Hotspot	TRUE
+CTNNB1	chr3.41224613.G.T	p.G34V	3	Hotspot	0.9983	likely_pathogenic	TRUE	strong_candidate	CTNNB1	Strong candidate	Hotspot	TRUE
+CTNNB1	chr3.41224619.A.C	p.H36P	1	Missense_Other	0.5866	likely_pathogenic	FALSE	strong_candidate	CTNNB1	Strong candidate	Missense_Other	TRUE
+CTNNB1	chr3.41224621.T.C	p.S37P	2	Hotspot	0.9888	likely_pathogenic	TRUE	strong_candidate	CTNNB1	Strong candidate	Hotspot	TRUE
+CTNNB1	chr3.41224621.T.G	p.S37A	1	Hotspot	0.7984	likely_pathogenic	TRUE	strong_candidate	CTNNB1	Strong candidate	Hotspot	TRUE
+CTNNB1	chr3.41224622.C.T	p.S37F	1	Hotspot	0.9951	likely_pathogenic	TRUE	strong_candidate	CTNNB1	Strong candidate	Hotspot	TRUE
+CTNNB1	chr3.41224633.A.G	p.T41A	3	Hotspot	0.7939	likely_pathogenic	TRUE	strong_candidate	CTNNB1	Strong candidate	Hotspot	TRUE
+CTNNB1	chr3.41224646.C.G	p.S45C	1	Hotspot	0.8545	likely_pathogenic	TRUE	strong_candidate	CTNNB1	Strong candidate	Hotspot	TRUE
+CTNNB1	chr3.41224646.C.T	p.S45F	2	Hotspot	0.9695	likely_pathogenic	TRUE	strong_candidate	CTNNB1	Strong candidate	Hotspot	TRUE
+PIK3CA	chr3.179198937.C.T	p.R38C	2	Missense_Other	0.9708	likely_pathogenic	FALSE	strong_candidate	PIK3CA	Strong candidate	Missense_Other	TRUE
+PIK3CA	chr3.179198940.G.A	p.E39K	1	Missense_Other	0.9753	likely_pathogenic	FALSE	strong_candidate	PIK3CA	Strong candidate	Missense_Other	TRUE
+PIK3CA	chr3.179199088.G.A	p.R88Q	7	Hotspot	0.8807	likely_pathogenic	TRUE	strong_candidate	PIK3CA	Strong candidate	Hotspot	TRUE
+PIK3CA	chr3.179199136.C.G	p.P104R	1	Missense_Other	0.9699	likely_pathogenic	FALSE	strong_candidate	PIK3CA	Strong candidate	Missense_Other	TRUE
+PIK3CA	chr3.179199158.G.C	p.K111N	1	Missense_Other	0.9825	likely_pathogenic	FALSE	strong_candidate	PIK3CA	Strong candidate	Missense_Other	TRUE
+PIK3CA	chr3.179199690.G.A	p.G118D	1	Missense_Other	0.9889	likely_pathogenic	FALSE	strong_candidate	PIK3CA	Strong candidate	Missense_Other	TRUE
+PIK3CA	chr3.179203764.A.G	p.N345S	1	Missense_Other	0.7443	likely_pathogenic	FALSE	strong_candidate	PIK3CA	Strong candidate	Missense_Other	TRUE
+PIK3CA	chr3.179204536.G.A	p.E365K	1	Missense_Other	0.921	likely_pathogenic	FALSE	strong_candidate	PIK3CA	Strong candidate	Missense_Other	TRUE
+PIK3CA	chr3.179210192.T.C	p.C420R	4	Hotspot	0.9797	likely_pathogenic	TRUE	strong_candidate	PIK3CA	Strong candidate	Hotspot	TRUE
+PIK3CA	chr3.179210279.C.A	p.P449T	1	Missense_Other	0.7681	likely_pathogenic	FALSE	strong_candidate	PIK3CA	Strong candidate	Missense_Other	TRUE
+PIK3CA	chr3.179218286.C.G	p.P539R	1	Missense_Other	0.9692	likely_pathogenic	FALSE	strong_candidate	PIK3CA	Strong candidate	Missense_Other	TRUE
+PIK3CA	chr3.179218294.G.A	p.E542K	10	Hotspot	0.9409	likely_pathogenic	TRUE	strong_candidate	PIK3CA	Strong candidate	Hotspot	TRUE
+PIK3CA	chr3.179218303.G.A	p.E545K	16	Hotspot	0.9878	likely_pathogenic	TRUE	strong_candidate	PIK3CA	Strong candidate	Hotspot	TRUE
+PIK3CA	chr3.179218303.G.C	p.E545Q	1	Hotspot	0.954	likely_pathogenic	TRUE	strong_candidate	PIK3CA	Strong candidate	Hotspot	TRUE
+PIK3CA	chr3.179218304.A.C	p.E545A	1	Hotspot	0.9665	likely_pathogenic	TRUE	strong_candidate	PIK3CA	Strong candidate	Hotspot	TRUE
+PIK3CA	chr3.179218305.G.T	p.E545D	4	Hotspot	0.8674	likely_pathogenic	TRUE	strong_candidate	PIK3CA	Strong candidate	Hotspot	TRUE
+PIK3CA	chr3.179218307.A.G	p.Q546R	1	Hotspot	0.9392	likely_pathogenic	TRUE	strong_candidate	PIK3CA	Strong candidate	Hotspot	TRUE
+PIK3CA	chr3.179221048.G.A	p.R693H	1	Missense_Other	0.8999	likely_pathogenic	FALSE	strong_candidate	PIK3CA	Strong candidate	Missense_Other	TRUE
+PIK3CA	chr3.179221144.A.G	p.D725G	1	Missense_Other	0.4992	ambiguous	FALSE	uncertain	PIK3CA	Uncertain	Missense_Other	TRUE
+PIK3CA	chr3.179221146.G.A	p.E726K	1	Missense_Other	0.6471	likely_pathogenic	FALSE	strong_candidate	PIK3CA	Strong candidate	Missense_Other	TRUE
+PIK3CA	chr3.179230077.G.A	p.G914R	1	Missense_Other	0.9956	likely_pathogenic	FALSE	strong_candidate	PIK3CA	Strong candidate	Missense_Other	TRUE
+PIK3CA	chr3.179234176.G.C	p.G1007R	1	Missense_Other	0.9708	likely_pathogenic	FALSE	strong_candidate	PIK3CA	Strong candidate	Missense_Other	TRUE
+PIK3CA	chr3.179234230.A.G	p.T1025A	1	Missense_Other	0.8203	likely_pathogenic	FALSE	strong_candidate	PIK3CA	Strong candidate	Missense_Other	TRUE
+PIK3CA	chr3.179234286.G.T	p.M1043I	1	Hotspot	0.9613	likely_pathogenic	TRUE	strong_candidate	PIK3CA	Strong candidate	Hotspot	TRUE
+PIK3CA	chr3.179234296.C.T	p.H1047Y	1	Hotspot	0.2301	likely_benign	TRUE	strong_candidate	PIK3CA	Strong candidate	Hotspot	TRUE
+PIK3CA	chr3.179234297.A.G	p.H1047R	22	Hotspot	0.5381	ambiguous	TRUE	strong_candidate	PIK3CA	Strong candidate	Hotspot	TRUE
+PIK3CA	chr3.179234297.A.T	p.H1047L	3	Hotspot	0.438	ambiguous	TRUE	strong_candidate	PIK3CA	Strong candidate	Hotspot	TRUE
+PIK3CA	chr3.179234302.G.C	p.G1049R	1	Missense_Other	0.9553	likely_pathogenic	FALSE	strong_candidate	PIK3CA	Strong candidate	Missense_Other	TRUE
+PDGFRA	chr4.54270659.G.A	p.R383H	1	Missense_Other	0.6619	likely_pathogenic	FALSE	strong_candidate	PDGFRA	Strong candidate	Missense_Other	TRUE
+PDGFRA	chr4.54285866.G.A	p.R822H	2	Missense_Other	0.9995	likely_pathogenic	FALSE	strong_candidate	PDGFRA	Strong candidate	Missense_Other	TRUE
+KIT	chr4.54698476.G.A	p.R177H	2	Missense_Other	0.2971	likely_benign	FALSE	likely_weak	KIT	Likely weak / tolerated	Missense_Other	TRUE
+KIT	chr4.54727220.C.A	p.Q515K	1	Missense_Other	0.0655	likely_benign	FALSE	likely_weak	KIT	Likely weak / tolerated	Missense_Other	TRUE
+KIT	chr4.54727495.T.C	p.L576P	1	Missense_Other	0.9996	likely_pathogenic	FALSE	strong_candidate	KIT	Strong candidate	Missense_Other	TRUE
+KIT	chr4.54733155.A.T	p.D816V	1	Hotspot	0.9989	likely_pathogenic	TRUE	strong_candidate	KIT	Strong candidate	Hotspot	TRUE
+KIT	chr4.54733174.T.A	p.N822K	2	Missense_Other	0.993	likely_pathogenic	FALSE	strong_candidate	KIT	Strong candidate	Missense_Other	TRUE
+FGFR4	chr5.177095592.G.T	p.A564S	2	Missense_Other	0.0805	likely_benign	FALSE	likely_weak	FGFR4	Likely weak / tolerated	Missense_Other	TRUE
+HIST1H3B	chr6.26031910.C.T	p.E51K	1	Missense_Other			FALSE	uncertain	HIST1H3B	Uncertain	Missense_Other	FALSE
+HIST1H3B	chr6.26031978.T.A	p.K28M	1	Missense_Other			FALSE	uncertain	HIST1H3B	Uncertain	Missense_Other	FALSE
+HIST1H3C	chr6.26045493.A.T	p.K28M	1	Missense_Other			FALSE	uncertain	HIST1H3C	Uncertain	Missense_Other	FALSE
+EGFR	chr7.55143387.G.A	p.R108K	1	Missense_Other	0.909	likely_pathogenic	FALSE	strong_candidate	EGFR	Strong candidate	Missense_Other	TRUE
+EGFR	chr7.55154129.C.T	p.A289V	1	Missense_Other	0.8289	likely_pathogenic	FALSE	strong_candidate	EGFR	Strong candidate	Missense_Other	TRUE
+EGFR	chr7.55165350.G.T	p.G598V	1	Missense_Other	0.838	likely_pathogenic	FALSE	strong_candidate	EGFR	Strong candidate	Missense_Other	TRUE
+EGFR	chr7.55174014.G.A	p.G719S	1	Hotspot	0.998	likely_pathogenic	TRUE	strong_candidate	EGFR	Strong candidate	Hotspot	TRUE
+EGFR	chr7.55174789.C.T	p.T751I	1	Missense_Other	0.812	likely_pathogenic	FALSE	strong_candidate	EGFR	Strong candidate	Missense_Other	TRUE
+EGFR	chr7.55181312.G.T	p.S768I	1	Hotspot	0.9018	likely_pathogenic	TRUE	strong_candidate	EGFR	Strong candidate	Hotspot	TRUE
+EGFR	chr7.55181378.C.T	p.T790M	1	Hotspot	0.966	likely_pathogenic	TRUE	strong_candidate	EGFR	Strong candidate	Hotspot	TRUE
+EGFR	chr7.55191822.T.G	p.L858R	1	Hotspot	0.9968	likely_pathogenic	TRUE	strong_candidate	EGFR	Strong candidate	Hotspot	TRUE
+SMO	chr7.129211752.A.G	p.T640A	1	Missense_Other	0.1837	likely_benign	FALSE	likely_weak	SMO	Likely weak / tolerated	Missense_Other	TRUE
+BRAF	chr7.140734715.G.A	p.A728V	1	Missense_Other	0.7928	likely_pathogenic	FALSE	strong_candidate	BRAF	Strong candidate	Missense_Other	TRUE
+BRAF	chr7.140739895.G.A	p.R682W	1	Missense_Other	0.8033	likely_pathogenic	FALSE	strong_candidate	BRAF	Strong candidate	Missense_Other	TRUE
+BRAF	chr7.140753316.A.T	p.S607T	1	Missense_Other	0.4259	ambiguous	FALSE	uncertain	BRAF	Uncertain	Missense_Other	TRUE
+BRAF	chr7.140753334.TCAC.TATC	p.VK600DK	1	Hotspot			TRUE	strong_candidate	BRAF	Strong candidate	Hotspot	FALSE
+BRAF	chr7.140753336.A.T	p.V600E	50	Hotspot	0.9927	likely_pathogenic	TRUE	strong_candidate	BRAF	Strong candidate	Hotspot	TRUE
+BRAF	chr7.140753345.A.C	p.L597R	1	Hotspot	0.9996	likely_pathogenic	TRUE	strong_candidate	BRAF	Strong candidate	Hotspot	TRUE
+BRAF	chr7.140753346.G.C	p.L597V	1	Hotspot	0.9939	likely_pathogenic	TRUE	strong_candidate	BRAF	Strong candidate	Hotspot	TRUE
+BRAF	chr7.140753349.C.G	p.G596R	1	Hotspot	0.9999	likely_pathogenic	TRUE	strong_candidate	BRAF	Strong candidate	Hotspot	TRUE
+BRAF	chr7.140753392.A.T	p.N581K	1	Hotspot	0.9994	likely_pathogenic	TRUE	strong_candidate	BRAF	Strong candidate	Hotspot	TRUE
+BRAF	chr7.140778061.T.C	p.K483E	1	Missense_Other	0.9999	likely_pathogenic	FALSE	strong_candidate	BRAF	Strong candidate	Missense_Other	TRUE
+BRAF	chr7.140781602.C.A	p.G469V	1	Hotspot	0.9999	likely_pathogenic	TRUE	strong_candidate	BRAF	Strong candidate	Hotspot	TRUE
+BRAF	chr7.140781611.C.A	p.G466V	1	Hotspot	0.9999	likely_pathogenic	TRUE	strong_candidate	BRAF	Strong candidate	Hotspot	TRUE
+BRAF	chr7.140781617.C.A	p.G464V	1	Missense_Other	0.9999	likely_pathogenic	FALSE	strong_candidate	BRAF	Strong candidate	Missense_Other	TRUE
+BRAF	chr7.140781617.C.T	p.G464E	1	Missense_Other	1	likely_pathogenic	FALSE	strong_candidate	BRAF	Strong candidate	Missense_Other	TRUE
+BRAF	chr7.140794387.C.T	p.R354Q	1	Missense_Other	0.3559	ambiguous	FALSE	uncertain	BRAF	Uncertain	Missense_Other	TRUE
+MYC	chr8.127736612.G.A	p.V7M	1	Missense_Other			FALSE	uncertain	MYC	Uncertain	Missense_Other	FALSE
+MYC	chr8.127738276.T.C	p.V20A	1	Missense_Other	0.1112	likely_benign	FALSE	likely_weak	MYC	Likely weak / tolerated	Missense_Other	TRUE
+MYC	chr8.127738291.G.C	p.R25T	1	Missense_Other	0.1811	likely_benign	FALSE	likely_weak	MYC	Likely weak / tolerated	Missense_Other	TRUE
+MYC	chr8.127738297.A.C	p.Y27S	1	Missense_Other	0.2231	likely_benign	FALSE	likely_weak	MYC	Likely weak / tolerated	Missense_Other	TRUE
+MYC	chr8.127738346.G.T	p.E43D	1	Missense_Other	0.0761	likely_benign	FALSE	likely_weak	MYC	Likely weak / tolerated	Missense_Other	TRUE
+MYC	chr8.127738351.A.G	p.N45S	1	Missense_Other	0.1146	likely_benign	FALSE	likely_weak	MYC	Likely weak / tolerated	Missense_Other	TRUE
+MYC	chr8.127738369.A.T	p.Q51L	1	Missense_Other	0.1006	likely_benign	FALSE	likely_weak	MYC	Likely weak / tolerated	Missense_Other	TRUE
+MYC	chr8.127738393.C.T	p.A59V	1	Missense_Other	0.7963	likely_pathogenic	FALSE	strong_candidate	MYC	Strong candidate	Missense_Other	TRUE
+MYC	chr8.127738395.C.A	p.P60T	2	Missense_Other	0.9718	likely_pathogenic	FALSE	strong_candidate	MYC	Strong candidate	Missense_Other	TRUE
+MYC	chr8.127738422.G.A	p.E69K	1	Missense_Other	0.9695	likely_pathogenic	FALSE	strong_candidate	MYC	Strong candidate	Missense_Other	TRUE
+MYC	chr8.127738431.C.A	p.P72T	1	Missense_Other	0.9898	likely_pathogenic	FALSE	strong_candidate	MYC	Strong candidate	Missense_Other	TRUE
+MYC	chr8.127738431.C.T	p.P72S	1	Missense_Other	0.9903	likely_pathogenic	FALSE	strong_candidate	MYC	Strong candidate	Missense_Other	TRUE
+MYC	chr8.127738434.A.G	p.T73A	1	Missense_Other	0.9512	likely_pathogenic	FALSE	strong_candidate	MYC	Strong candidate	Missense_Other	TRUE
+MYC	chr8.127738434.ACCC.ATTC	p.TP73IP	1	Missense_Other			FALSE	uncertain	MYC	Uncertain	Missense_Other	FALSE
+MYC	chr8.127738435.C.T	p.T73I	1	Missense_Other	0.9954	likely_pathogenic	FALSE	strong_candidate	MYC	Strong candidate	Missense_Other	TRUE
+MYC	chr8.127738438.C.A	p.P74Q	1	Missense_Other	0.9987	likely_pathogenic	FALSE	strong_candidate	MYC	Strong candidate	Missense_Other	TRUE
+MYC	chr8.127738438.C.T	p.P74L	1	Missense_Other	0.9966	likely_pathogenic	FALSE	strong_candidate	MYC	Strong candidate	Missense_Other	TRUE
+MYC	chr8.127738440.C.G	p.P75A	2	Missense_Other	0.9752	likely_pathogenic	FALSE	strong_candidate	MYC	Strong candidate	Missense_Other	TRUE
+MYC	chr8.127738446.T.C	p.S77P	1	Missense_Other	0.9642	likely_pathogenic	FALSE	strong_candidate	MYC	Strong candidate	Missense_Other	TRUE
+MYC	chr8.127738491.G.A	p.V92I	1	Missense_Other	0.0762	likely_benign	FALSE	likely_weak	MYC	Likely weak / tolerated	Missense_Other	TRUE
+MYC	chr8.127738495.C.G	p.T93R	1	Missense_Other	0.1392	likely_benign	FALSE	likely_weak	MYC	Likely weak / tolerated	Missense_Other	TRUE
+MYC	chr8.127738506.C.T	p.L97F	2	Missense_Other	0.0677	likely_benign	FALSE	likely_weak	MYC	Likely weak / tolerated	Missense_Other	TRUE
+MYC	chr8.127738585.G.A	p.G123E	2	Missense_Other	0.4537	ambiguous	FALSE	strong_candidate	MYC	Strong candidate	Missense_Other	TRUE
+MYC	chr8.127738647.A.G	p.I144V	1	Missense_Other	0.2284	likely_benign	FALSE	likely_weak	MYC	Likely weak / tolerated	Missense_Other	TRUE
+MYC	chr8.127738671.GGCTTC.GACTCC	p.GF152DS	1	Missense_Other			FALSE	uncertain	MYC	Uncertain	Missense_Other	FALSE
+MYC	chr8.127738707.C.G	p.L164V	1	Missense_Other	0.4294	ambiguous	FALSE	uncertain	MYC	Uncertain	Missense_Other	TRUE
+MYC	chr8.127738782.T.A	p.S189T	1	Missense_Other	0.0858	likely_benign	FALSE	likely_weak	MYC	Likely weak / tolerated	Missense_Other	TRUE
+MYC	chr8.127738818.T.C	p.S201P	1	Missense_Other	0.2558	likely_benign	FALSE	likely_weak	MYC	Likely weak / tolerated	Missense_Other	TRUE
+MYC	chr8.127738870.G.A	p.S218N	1	Missense_Other	0.0868	likely_benign	FALSE	likely_weak	MYC	Likely weak / tolerated	Missense_Other	TRUE
+MYC	chr8.127738977.G.T	p.V254L	1	Missense_Other	0.0762	likely_benign	FALSE	likely_weak	MYC	Likely weak / tolerated	Missense_Other	TRUE
+MYC	chr8.127739008.G.A	p.S264N	1	Missense_Other	0.5656	likely_pathogenic	FALSE	strong_candidate	MYC	Strong candidate	Missense_Other	TRUE

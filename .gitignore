@@ -10,7 +10,12 @@ env/
 .ipynb_checkpoints/
 
 # AlphaMissense data / model outputs (often large)
-data/
+# Ignore data/ by default; track small panel definitions needed to reproduce runs.
+data/*
+!data/target_genes.tsv
+!data/oncogene_shortlist_ped_gof_snvs.tsv
+!data/hotspots_tier0.csv
+data/cache/
 *.tsv.gz
 # Local VEP cache + hg38 AlphaMissense table (multi-GB; keep out of git)
 /vep_cache/
