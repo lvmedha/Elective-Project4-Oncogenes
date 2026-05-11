@@ -17,6 +17,9 @@
 #   09_am_vs_chronos_scatter_faceted_by_gene.pdf  one panel per gene (AM points)
 #   09_am_class_vs_chronos_boxplot.pdf      pooled by AM class
 #   09_am_class_vs_chronos_faceted_by_gene.pdf    AM class x Chronos, facet = gene
+#   09_chronos_density_with_am_rug_faceted_by_gene.pdf
+#                                 full DepMap Chronos density per gene +
+#                                 rug of AM-scored mutant cell lines
 
 suppressPackageStartupMessages({
   library(data.table)
@@ -270,13 +273,18 @@ if (nrow(plot_sc) >= 1L) {
   p3 <- ggplot(plot_sc, aes(am_pathogenicity, GeneEffect)) +
     geom_hline(yintercept = -1, linetype = "dashed", linewidth = 0.25) +
     geom_point(aes(color = Mut_Status), alpha = 0.8, size = 1.8) +
-    facet_wrap(~ gene_f, scales = "free", ncol = ncol_f, drop = TRUE) +
+    # Shared AM x-axis across panels (AM is bounded 0–1 by definition);
+    # leave y free since Chronos range varies a lot between essential and
+    # non-essential genes.
+    facet_wrap(~ gene_f, scales = "free_y", ncol = ncol_f, drop = TRUE) +
+    scale_x_continuous(limits = c(0, 1),
+                       breaks = c(0, 0.25, 0.5, 0.75, 1)) +
     scale_color_brewer(palette = "Set1") +
     labs(
       title = "AlphaMissense vs Chronos (faceted by gene)",
       subtitle = paste0(
         RUN_NAME,
-        "; one panel per gene with ≥1 missense + AM; free x/y scales"
+        "; one panel per gene with ≥1 missense + AM; shared x (AM 0–1), free y"
       ),
       x = "AlphaMissense pathogenicity",
       y = "Chronos gene effect",
@@ -323,6 +331,50 @@ ggsave(
   height = 2 + 2.6 * ceiling(ng2 / ncol_f)
 )
 
+# 5) Per-gene Chronos density (full DepMap) with AM-scored mutant rug ----
+# x = full Chronos distribution across DepMap cell lines (cge_long; all WT +
+# mutant lines, not just our cohort). The cohort's AM-scored mutant lines
+# from plot_sc are overlaid as a rug at the bottom, colored by Mut_Status,
+# so you can see where each variant sits relative to the population.
+plot_sc_rug <- plot_u[!is.na(am_pathogenicity)]
+genes_with_am <- sort(unique(plot_sc_rug$gene_symbol))
+if (length(genes_with_am) >= 1L) {
+  bg <- cge_long[gene_symbol %in% genes_with_am & !is.na(GeneEffect)]
+  bg[, gene_f := factor(gene_symbol, levels = target_genes)]
+  rug_dt <- plot_sc_rug[, .(gene_f, GeneEffect, Mut_Status)]
+  ng3 <- length(genes_with_am)
+  x_lim <- range(c(bg$GeneEffect, rug_dt$GeneEffect), na.rm = TRUE)
+  p5 <- ggplot(bg, aes(GeneEffect)) +
+    geom_density(fill = "grey80", color = "grey40", linewidth = 0.35) +
+    geom_vline(xintercept = -1, linetype = "dashed", linewidth = 0.25) +
+    geom_rug(data = rug_dt,
+             aes(GeneEffect, color = Mut_Status),
+             sides = "b", length = grid::unit(0.06, "npc"),
+             linewidth = 0.6, alpha = 0.85, inherit.aes = FALSE) +
+    facet_wrap(~ gene_f, scales = "free_y", ncol = ncol_f, drop = TRUE) +
+    scale_x_continuous(limits = x_lim) +
+    scale_color_brewer(palette = "Set1") +
+    labs(
+      title = "Chronos density (full DepMap) with AM-scored mutant rug",
+      subtitle = paste0(
+        RUN_NAME,
+        "; grey density = all DepMap cell lines per gene; ",
+        "rug = AM-scored cohort variants"
+      ),
+      x = "Chronos gene effect",
+      y = "Density",
+      color = "Mut_Status"
+    ) +
+    base +
+    theme(strip.text = element_text(size = 7))
+  ggsave(
+    file.path(OUT_DIR, "09_chronos_density_with_am_rug_faceted_by_gene.pdf"),
+    p5,
+    width = 11,
+    height = 2 + 2.5 * ceiling(ng3 / ncol_f)
+  )
+}
+
 cat("\nWrote:\n",
     " - ", file.path(OUT_DIR, "09_am_chronos_per_event.tsv"), "\n",
     " - ", file.path(OUT_DIR, "09_am_chronos_summary.txt"), "\n",
@@ -333,4 +385,7 @@ cat("\nWrote:\n",
     " - ", file.path(OUT_DIR, "09_am_class_vs_chronos_boxplot.pdf"), "\n",
     " - ", file.path(OUT_DIR, "09_am_class_vs_chronos_faceted_by_gene.pdf"),
     "\n",
+    " - ", file.path(OUT_DIR,
+                     "09_chronos_density_with_am_rug_faceted_by_gene.pdf"),
+    " (if any AM-scored points)\n",
     sep = "")

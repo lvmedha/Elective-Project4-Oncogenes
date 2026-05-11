@@ -13,6 +13,7 @@
 suppressPackageStartupMessages({
   library(data.table)
   library(ggplot2)
+  library(RColorBrewer)
 })
 
 DOC_DIR  <- "C:/Users/mvijayan/Documents"
@@ -131,11 +132,16 @@ plot_dt[, Mut_Status := factor(Mut_Status,
 plot_dt <- plot_dt[!is.na(GeneEffect)]
 
 # ---- 4. Make the per-gene waterfall plot ----------------------------------
-pal <- c(Hotspot        = "#D7263D",
-         Missense_Other = "#F46036",
-         InframeIndel   = "#9D4EDD",
-         Truncating     = "#3A506B",
-         Silent         = "#999999",
+# Mutation-tier colors are drawn from RColorBrewer's "Set1" qualitative
+# palette so adjacent buckets (Hotspot vs Missense_Other) stay visually
+# distinct (red vs blue rather than red vs orange). WT is a light grey
+# so non-mutant lines fall into the background.
+set1 <- brewer.pal(9, "Set1")
+pal <- c(Hotspot        = set1[1],  # red
+         Missense_Other = set1[2],  # blue
+         InframeIndel   = set1[4],  # purple
+         Truncating     = set1[3],  # green
+         Silent         = set1[9],  # grey
          WT             = "#E0E0E0")
 
 # Lookup "tier" by gene so titles can show it.
