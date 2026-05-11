@@ -73,9 +73,6 @@ source("R/09_am_dependency_figures.R")   # AM vs Chronos PDFs + 09_am_chronos_*.
 
 # Optional: PRISM (expects CSVs under ~/Documents; see R/10 header)
 source("R/10_prism_mutation_sensitivity.R")
-
-# Part 2 triage: unique missense variants + AM + hotspot rules + PDFs
-source("R/11_am_missense_triage_figures.R")
 ```
 
 Panel files **`data/target_genes.tsv`**, **`data/oncogene_shortlist_ped_gof_snvs.tsv`**,
@@ -84,7 +81,7 @@ and **`data/hotspots_tier0.csv`** are **tracked in git**; other `data/*`
 set `SHORTLIST` in `00_build_target_genes.R` to `oncogene_shortlist_sjpedpanel.tsv`
 and add that file locally (not tracked by default).
 
-Core **00–07** need only **R + network**. **09/11** need the annotated VCF;
+Core **00–07** need only **R + network**. **09** needs the annotated VCF;
 **10** needs PRISM files on disk.
 
 ---
@@ -115,13 +112,12 @@ try again.
 
 ```
 .
-├── R/                                # R pipeline 00–11 (see Running section)
+├── R/                                # R pipeline 00–10 (see Running section)
 │   ├── 00_build_target_genes.R
 │   ├── 01_profile_inputs.R … 07_waterfall_plots.R
 │   ├── 08_make_vep_input.R           # cohort VCF / Ensembl input
 │   ├── 09_am_dependency_figures.R    # AM vs Chronos (needs annotated VCF)
-│   ├── 10_prism_mutation_sensitivity.R
-│   └── 11_am_missense_triage_figures.R
+│   └── 10_prism_mutation_sensitivity.R
 ├── data/                             # tracked: panel TSV/CSV only (see .gitignore)
 │   ├── target_genes.tsv
 │   ├── oncogene_shortlist_ped_gof_snvs.tsv
@@ -143,7 +139,7 @@ try again.
 
 `results/` is split per-run. **`RUN_NAME`** in each script is currently
 `"ped_gof_snv"`. Change it to freeze another run, then re-run **01..07**
-(and **08–11** as needed).
+(and **08–10** as needed).
 
 The R pipeline is the project's core analysis path; AlphaMissense and
 the local VEP install are auxiliary layers that the R outputs feed into.
@@ -364,7 +360,6 @@ source("R/07_waterfall_plots.R")
 # After results/cohort_full/09_vep_full_alphamissense.vcf.gz exists:
 source("R/09_am_dependency_figures.R")
 # source("R/10_prism_mutation_sensitivity.R")   # optional: PRISM CSVs
-source("R/11_am_missense_triage_figures.R")     # Part 2 triage (needs same VCF as 09)
 ```
 
 ### External inputs (not in this repo)
@@ -376,7 +371,7 @@ Paths are configured at the top of each script (default **`C:/Users/mvijayan/Doc
 | Long-format VAF / marker table (`AllMarkers_VAF_long.tsv` or project-specific path) | `01`–`06` |
 | `depmap_CGE.csv`, `depmap_meta.csv` | `06`, `07`, `09` |
 | `samples.txt` (PID ↔ ACH mapping) | `06` |
-| `results/cohort_full/09_vep_full_alphamissense.vcf.gz` | `09`, `11` |
+| `results/cohort_full/09_vep_full_alphamissense.vcf.gz` | `09` |
 | `PRISMOncologyReferenceSeqLog2AUCMatrix.csv`, `PRISMOncologyReferenceSeqCompoundList.csv` | `10` |
 
 ### Target oncogenes — single source of truth

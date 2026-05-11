@@ -17,7 +17,6 @@
 #   09_am_vs_chronos_scatter_faceted_by_gene.pdf  one panel per gene (AM points)
 #   09_am_class_vs_chronos_boxplot.pdf      pooled by AM class
 #   09_am_class_vs_chronos_faceted_by_gene.pdf    AM class x Chronos, facet = gene
-# Part 2 triage (unique variants, no Chronos): R/11_am_missense_triage_figures.R
 
 suppressPackageStartupMessages({
   library(data.table)
