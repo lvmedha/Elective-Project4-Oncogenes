@@ -20,6 +20,10 @@
 #   09_chronos_density_with_am_rug_faceted_by_gene.pdf
 #                                 full DepMap Chronos density per gene +
 #                                 rug of AM-scored mutant cell lines
+#                                 (rug colored by Mut_Status)
+#   09_chronos_density_with_am_score_rug_faceted_by_gene.pdf
+#                                 same density, rug colored by AM
+#                                 pathogenicity (continuous, 0–1)
 
 suppressPackageStartupMessages({
   library(data.table)
@@ -375,6 +379,45 @@ if (length(genes_with_am) >= 1L) {
   )
 }
 
+# 6) Same density, but rug colored by AlphaMissense pathogenicity ----
+# Identical x-axis (Chronos) and per-gene faceting as plot 5; only the rug
+# encoding changes: tick position = Chronos for that ACH x variant, tick
+# color = AM pathogenicity (0-1, locked) instead of Mut_Status. Lets you
+# eyeball whether AM-pathogenic ticks cluster in the dependent (left) tail.
+if (length(genes_with_am) >= 1L) {
+  rug_dt_am <- plot_sc_rug[, .(gene_f, GeneEffect, am_pathogenicity)]
+  p6 <- ggplot(bg, aes(GeneEffect)) +
+    geom_density(fill = "grey80", color = "grey40", linewidth = 0.35) +
+    geom_vline(xintercept = -1, linetype = "dashed", linewidth = 0.25) +
+    geom_rug(data = rug_dt_am,
+             aes(GeneEffect, color = am_pathogenicity),
+             sides = "b", length = grid::unit(0.06, "npc"),
+             linewidth = 0.6, alpha = 0.85, inherit.aes = FALSE) +
+    facet_wrap(~ gene_f, scales = "free_y", ncol = ncol_f, drop = TRUE) +
+    scale_x_continuous(limits = x_lim) +
+    scale_color_viridis_c(limits = c(0, 1), option = "C",
+                          name = "AlphaMissense") +
+    labs(
+      title = "Chronos density (full DepMap) with AM-score rug",
+      subtitle = paste0(
+        RUN_NAME,
+        "; grey density = all DepMap cell lines per gene; ",
+        "rug = cohort variants colored by AM pathogenicity"
+      ),
+      x = "Chronos gene effect",
+      y = "Density"
+    ) +
+    base +
+    theme(strip.text = element_text(size = 7))
+  ggsave(
+    file.path(OUT_DIR,
+              "09_chronos_density_with_am_score_rug_faceted_by_gene.pdf"),
+    p6,
+    width = 11,
+    height = 2 + 2.5 * ceiling(ng3 / ncol_f)
+  )
+}
+
 cat("\nWrote:\n",
     " - ", file.path(OUT_DIR, "09_am_chronos_per_event.tsv"), "\n",
     " - ", file.path(OUT_DIR, "09_am_chronos_summary.txt"), "\n",
@@ -387,5 +430,8 @@ cat("\nWrote:\n",
     "\n",
     " - ", file.path(OUT_DIR,
                      "09_chronos_density_with_am_rug_faceted_by_gene.pdf"),
+    " (if any AM-scored points)\n",
+    " - ", file.path(OUT_DIR,
+                     "09_chronos_density_with_am_score_rug_faceted_by_gene.pdf"),
     " (if any AM-scored points)\n",
     sep = "")

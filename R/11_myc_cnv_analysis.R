@@ -147,6 +147,30 @@ print(per_line[order(Chronos),
                  am_class_top, am_max_pathogenicity = round(am_max_pathogenicity, 2),
                  variants)])
 
+cat("\nCohort regression: Chronos ~ log2(MYC_CN)\n")
+fit_dt_s <- per_line[!is.na(MYC_CN) & !is.na(Chronos) & MYC_CN > 0]
+if (nrow(fit_dt_s) >= 3L) {
+  lm_s <- lm(Chronos ~ log2(MYC_CN), data = fit_dt_s)
+  rho_s <- suppressWarnings(cor(fit_dt_s$MYC_CN, fit_dt_s$Chronos,
+                                method = "spearman"))
+  pear_s <- suppressWarnings(cor(log2(fit_dt_s$MYC_CN), fit_dt_s$Chronos,
+                                 method = "pearson"))
+  cat(sprintf("  n             : %d\n", nrow(fit_dt_s)))
+  cat(sprintf("  intercept     : %+0.3f\n", unname(coef(lm_s)[1])))
+  cat(sprintf("  slope (log2CN): %+0.3f  (Chronos change per CN doubling)\n",
+              unname(coef(lm_s)[2])))
+  cat(sprintf("  R^2           : %.3f\n", summary(lm_s)$r.squared))
+  cat(sprintf("  p (slope!=0)  : %.3g\n",
+              coef(summary(lm_s))[2, "Pr(>|t|)"]))
+  cat(sprintf("  Pearson r     : %+0.3f  (on log2(MYC_CN))\n", pear_s))
+  cat(sprintf("  Spearman rho  : %+0.3f  (rank-based, scale-free)\n", rho_s))
+  cat("  Negative slope/rho confirms the same direction as the full-DepMap\n")
+  cat("  trend: more amplification -> more negative Chronos = more dependent.\n")
+} else {
+  cat(sprintf("  Skipped (n=%d, need >= 3 lines with CN and Chronos).\n",
+              nrow(fit_dt_s)))
+}
+
 cat("\n--- The puzzle: AM=likely_benign yet Chronos<-2 (highly dependent) ---\n")
 puzzling <- per_line[Chronos < -2 & am_class_top == "likely benign"]
 if (nrow(puzzling)) {
@@ -181,13 +205,46 @@ base_theme <- theme_minimal(base_size = 11) +
 
 xmax <- max(c(bg$MYC_CN, per_line$MYC_CN), na.rm = TRUE)
 
+# Cohort-only regression: log2(MYC_CN) -> Chronos. Fit in log2 space because
+# CN is naturally multiplicative (a doubling is the meaningful unit) and the
+# x-axis is on a log2 scale. Spearman rho is reported alongside R^2 to mirror
+# the non-parametric stat used for the full DepMap above.
+fit_dt <- per_line[!is.na(MYC_CN) & !is.na(Chronos) & MYC_CN > 0]
+n_fit <- nrow(fit_dt)
+lm_subtitle <- ""
+if (n_fit >= 3L) {
+  lm_coh   <- lm(Chronos ~ log2(MYC_CN), data = fit_dt)
+  intc_coh <- unname(coef(lm_coh)[1])
+  slope_coh <- unname(coef(lm_coh)[2])
+  r2_coh   <- summary(lm_coh)$r.squared
+  pval_coh <- coef(summary(lm_coh))[2, "Pr(>|t|)"]
+  rho_coh  <- suppressWarnings(cor(fit_dt$MYC_CN, fit_dt$Chronos,
+                                   method = "spearman"))
+  # Plain ASCII for the PDF device on Windows (Greek/superscript glyphs
+  # don't survive mbcsToSbcs conversion in the default PDF font).
+  lm_subtitle <- sprintf(
+    "Cohort fit (black line): Chronos = %.2f + %.2f * log2(MYC_CN); R^2=%.2f, p=%.2g, Spearman rho=%.2f (n=%d)",
+    intc_coh, slope_coh, r2_coh, pval_coh, rho_coh, n_fit)
+}
+
 p1 <- ggplot(bg, aes(MYC_CN, MYC_Chronos)) +
   geom_point(color = "grey80", alpha = 0.45, size = 0.85) +
   geom_hline(yintercept = -1, linetype = "dashed", linewidth = 0.3) +
   geom_vline(xintercept = 1, linetype = "dashed", linewidth = 0.3) +
   geom_point(data = per_line,
              aes(MYC_CN, Chronos, color = am_class_top),
-             size = 3.2, alpha = 0.9, inherit.aes = FALSE) +
+             size = 3.2, alpha = 0.9, inherit.aes = FALSE)
+
+if (n_fit >= 3L) {
+  p1 <- p1 + geom_smooth(
+    data = fit_dt,
+    aes(MYC_CN, Chronos),
+    method = "lm", formula = y ~ log2(x),
+    se = TRUE, color = "grey15", fill = "grey55",
+    linewidth = 0.55, alpha = 0.18, inherit.aes = FALSE)
+}
+
+p1 <- p1 +
   geom_text(data = per_line,
             aes(MYC_CN, Chronos, label = CellLine),
             size = 2.6, hjust = -0.15, vjust = 0.4,
@@ -202,7 +259,8 @@ p1 <- ggplot(bg, aes(MYC_CN, MYC_Chronos)) +
     subtitle = paste0(
       "Grey = full DepMap (n=", nrow(bg), ");  ",
       "colored = cohort MYC-mutant lines (n=", nrow(per_line), "). ",
-      "Dashed: CN=1 (diploid) and Chronos=-1 (essentiality threshold)."
+      "Dashed: CN=1 (diploid) and Chronos=-1 (essentiality threshold).",
+      if (nzchar(lm_subtitle)) paste0("\n", lm_subtitle) else ""
     ),
     x = "MYC relative copy number (log2 axis; 1 = diploid)",
     y = "MYC Chronos gene effect",

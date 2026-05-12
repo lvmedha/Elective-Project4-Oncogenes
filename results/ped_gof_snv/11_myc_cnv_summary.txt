@@ -52,6 +52,17 @@ Cohort MYC-mutant cell lines (sorted by Chronos, most dependent first):
 18:   1.02   -0.89 likely pathogenic                 0.80 p.A59V, p.TP73IP
 19:   0.96   -0.55     likely benign                 0.08           p.E43D
 
+Cohort regression: Chronos ~ log2(MYC_CN)
+  n             : 17
+  intercept     : -1.761
+  slope (log2CN): -0.877  (Chronos change per CN doubling)
+  R^2           : 0.388
+  p (slope!=0)  : 0.00758
+  Pearson r     : -0.623  (on log2(MYC_CN))
+  Spearman rho  : -0.502  (rank-based, scale-free)
+  Negative slope/rho confirms the same direction as the full-DepMap
+  trend: more amplification -> more negative Chronos = more dependent.
+
 --- The puzzle: AM=likely_benign yet Chronos<-2 (highly dependent) ---
         CellLine               lineage                             disease
           <char>                <char>                              <char>
