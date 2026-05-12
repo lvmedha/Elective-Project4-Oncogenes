@@ -1,0 +1,89 @@
+11_myc_cnv_analysis.R summary
+=============================
+
+Full DepMap (lines with MYC CN and MYC Chronos): n=872
+  median MYC_CN     : 1.35  (IQR 1.07 to 1.73, range 0.32 to 184.63)
+  median MYC_Chronos: -2.08  (IQR -2.48 to -1.56)
+  Spearman MYC_CN vs MYC_Chronos: rho=-0.440, p=1.1e-42
+  (negative rho means: more amplification -> more negative Chronos = more dependent)
+
+Cohort MYC-mutant cell lines (sorted by Chronos, most dependent first):
+
+         CellLine               lineage                             disease
+           <char>                <char>                              <char>
+ 1:      NCIH2087                  Lung          Non-Small Cell Lung Cancer
+ 2:           TE9     Esophagus/Stomach  Esophageal Squamous Cell Carcinoma
+ 3: LNCAPCLONEFGC              Prostate             Prostate Adenocarcinoma
+ 4:          KMM1              Lymphoid             Mature B-Cell Neoplasms
+ 5:         RT112 Bladder/Urinary Tract        Bladder Urothelial Carcinoma
+ 6:         SW837                 Bowel           Colorectal Adenocarcinoma
+ 7:         ST486              Lymphoid             Mature B-Cell Neoplasms
+ 8:          UHO1              Lymphoid                    Hodgkin Lymphoma
+ 9:        TANOUE              Lymphoid B-Cell Acute Lymphoblastic Leukemia
+10:          EKVX                  Lung          Non-Small Cell Lung Cancer
+11:       RT11284 Bladder/Urinary Tract        Bladder Urothelial Carcinoma
+12:           CMS               Myeloid              Acute Myeloid Leukemia
+13:          BL70              Lymphoid             Mature B-Cell Neoplasms
+14:         SKNO1               Myeloid              Acute Myeloid Leukemia
+15:        SUDHL5              Lymphoid             Mature B-Cell Neoplasms
+16:       NAMALWA              Lymphoid             Mature B-Cell Neoplasms
+17:         RL952                Uterus               Endometrial Carcinoma
+18:          RAJI              Lymphoid                Non-Hodgkin Lymphoma
+19:         A3KAW              Lymphoid             Mature B-Cell Neoplasms
+    MYC_CN Chronos      am_class_top am_max_pathogenicity         variants
+     <num>   <num>            <fctr>                <num>           <char>
+ 1:   4.39   -3.71 likely pathogenic                 0.97           p.E69K
+ 2:   3.84   -3.35     likely benign                 0.08          p.V254L
+ 3:   1.06   -3.19     likely benign                 0.11           p.N45S
+ 4:   1.60   -3.03     likely benign                 0.14           p.T93R
+ 5:   1.59   -2.89     likely benign                 0.07           p.L97F
+ 6:   1.15   -2.62     likely benign                 0.08           p.V92I
+ 7:     NA   -2.45     likely benign                 0.10           p.Q51L
+ 8:   1.06   -2.38 likely pathogenic                 0.57          p.S264N
+ 9:   1.40   -2.37     likely benign                 0.18           p.R25T
+10:   1.13   -2.35     likely benign                 0.09          p.S189T
+11:   1.59   -2.27     likely benign                 0.07           p.L97F
+12:   1.58   -1.98 likely pathogenic                 0.97           p.P60T
+13:   1.12   -1.96 likely pathogenic                 1.00           p.T73I
+14:   1.61   -1.90 likely pathogenic                 1.00           p.P74Q
+15:     NA   -1.50 likely pathogenic                 0.98           p.P75A
+16:   1.10   -1.48     likely benign                 0.11           p.V20A
+17:   1.47   -1.15     likely benign                 0.26          p.S201P
+18:   1.02   -0.89 likely pathogenic                 0.80 p.A59V, p.TP73IP
+19:   0.96   -0.55     likely benign                 0.08           p.E43D
+
+--- The puzzle: AM=likely_benign yet Chronos<-2 (highly dependent) ---
+        CellLine               lineage                             disease
+          <char>                <char>                              <char>
+1:           TE9     Esophagus/Stomach  Esophageal Squamous Cell Carcinoma
+2: LNCAPCLONEFGC              Prostate             Prostate Adenocarcinoma
+3:          KMM1              Lymphoid             Mature B-Cell Neoplasms
+4:         RT112 Bladder/Urinary Tract        Bladder Urothelial Carcinoma
+5:         SW837                 Bowel           Colorectal Adenocarcinoma
+6:         ST486              Lymphoid             Mature B-Cell Neoplasms
+7:        TANOUE              Lymphoid B-Cell Acute Lymphoblastic Leukemia
+8:          EKVX                  Lung          Non-Small Cell Lung Cancer
+9:       RT11284 Bladder/Urinary Tract        Bladder Urothelial Carcinoma
+   MYC_CN Chronos am_max_pathogenicity variants
+    <num>   <num>                <num>   <char>
+1:   3.84   -3.35                 0.08  p.V254L
+2:   1.06   -3.19                 0.11   p.N45S
+3:   1.60   -3.03                 0.14   p.T93R
+4:   1.59   -2.89                 0.07   p.L97F
+5:   1.15   -2.62                 0.08   p.V92I
+6:     NA   -2.45                 0.10   p.Q51L
+7:   1.40   -2.37                 0.18   p.R25T
+8:   1.13   -2.35                 0.09  p.S189T
+9:   1.59   -2.27                 0.07   p.L97F
+
+Median MYC_CN among these puzzling lines: 1.49
+Median MYC_CN in full DepMap: 1.35
+Interpretation:
+  If MYC_CN is elevated (>~1.3) in the puzzling lines, the dependency
+  is being driven by amplification, not the residue change. The
+  AM-likely-benign call is structurally correct (those residues are
+  not destabilising) but biologically uninformative for an oncogene
+  whose activation mechanism is gene dosage / overexpression.
+  Burkitt-style B-cell lymphoma lines may have near-diploid CN but
+  high MYC mRNA via IG-MYC translocation -- CN alone cannot detect
+  that case (mRNA analysis would).

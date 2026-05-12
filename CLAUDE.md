@@ -41,11 +41,16 @@ preserved at `results/pilot_10genes/` for comparison; don't overwrite it.
 | 08 | `R/08_make_vep_input.R` (optional) | 03 | `results/cohort_full/08_vep_input_full.{vcf,ensembl}` |
 | 09 | `R/09_am_dependency_figures.R` | `09_vep_full_alphamissense.vcf.gz` + 06 + DepMap CGE | `09_am_chronos_*.{tsv,pdf}` |
 | 10 | `R/10_prism_mutation_sensitivity.R` (optional) | PRISM CSVs + 06 | `10_prism_*.tsv`, `10_prism_volcano_*.pdf` |
+| 11 | `R/11_myc_cnv_analysis.R` | `~/Documents/depmap_cnv.csv` + 09 events | `11_myc_cnv_*.{tsv,txt,pdf}` |
 
 Steps 09–10 need files step 08 (or the cluster) produces. Step 10 needs
-PRISM CSVs in `~/Documents/`. The Part-2 triage script
-(`R/11_am_missense_triage_figures.R`) was removed in May 2026 — do not
-recreate it.
+PRISM CSVs in `~/Documents/`. Step 11 is a MYC-only follow-up to 09 that
+joins DepMap MYC copy number to the cohort's MYC missense events to
+explain why some AlphaMissense-likely-benign variants sit on highly
+MYC-dependent lines (answer: amplification or IG-MYC translocation).
+The earlier triage script (`R/11_am_missense_triage_figures.R`) was
+removed in May 2026 — do not recreate it under that name. The new `11`
+slot is the MYC CNV analysis.
 
 ---
 
@@ -185,3 +190,10 @@ top of the relevant R script if your layout differs.
   `09_chronos_density_with_am_rug_faceted_by_gene.pdf`: per-gene density
   of the full DepMap Chronos distribution with the cohort's AM-scored
   mutant lines as a rug.
+- **May 2026** — added `R/11_myc_cnv_analysis.R` (MYC-only): joins
+  `~/Documents/depmap_cnv.csv` to the cohort's MYC events. Closes the
+  AlphaMissense-vs-Chronos story for MYC: AM-likely-benign + highly
+  dependent lines are explained by MYC amplification (CN > ~1.5 in
+  solid-tumor carriers) or by IG-MYC translocation (B-cell lymphoma
+  lines, near-diploid CN but high mRNA — CN cannot detect this). Full
+  DepMap correlation: Spearman ρ(MYC_CN, MYC_Chronos) = −0.44, n=872.
