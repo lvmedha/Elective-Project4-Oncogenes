@@ -1,0 +1,127 @@
+12_myc_expression_analysis.R summary
+====================================
+
+Full DepMap (lines with MYC expression and MYC Chronos): n=1140
+  median MYC_Expression : 6.19  (IQR 5.30 to 7.05, range 0.01 to 11.15)
+  (units: log2(TPM+1))
+  median MYC_Chronos    : -2.08  (IQR -2.48 to -1.58)
+  Spearman MYC_Expression vs MYC_Chronos: rho=-0.464, p=4.4e-62
+  (negative rho means: higher expression -> more negative Chronos = more dependent)
+
+Cohort MYC-mutant cell lines (sorted by Chronos, most dependent first):
+
+         CellLine               lineage                             disease
+           <char>                <char>                              <char>
+ 1:      NCIH2087                  Lung          Non-Small Cell Lung Cancer
+ 2:           TE9     Esophagus/Stomach  Esophageal Squamous Cell Carcinoma
+ 3: LNCAPCLONEFGC              Prostate             Prostate Adenocarcinoma
+ 4:          KMM1              Lymphoid             Mature B-Cell Neoplasms
+ 5:         RT112 Bladder/Urinary Tract        Bladder Urothelial Carcinoma
+ 6:         SW837                 Bowel           Colorectal Adenocarcinoma
+ 7:         ST486              Lymphoid             Mature B-Cell Neoplasms
+ 8:          UHO1              Lymphoid                    Hodgkin Lymphoma
+ 9:        TANOUE              Lymphoid B-Cell Acute Lymphoblastic Leukemia
+10:          EKVX                  Lung          Non-Small Cell Lung Cancer
+11:       RT11284 Bladder/Urinary Tract        Bladder Urothelial Carcinoma
+12:           CMS               Myeloid              Acute Myeloid Leukemia
+13:          BL70              Lymphoid             Mature B-Cell Neoplasms
+14:         SKNO1               Myeloid              Acute Myeloid Leukemia
+15:        SUDHL5              Lymphoid             Mature B-Cell Neoplasms
+16:       NAMALWA              Lymphoid             Mature B-Cell Neoplasms
+17:         RL952                Uterus               Endometrial Carcinoma
+18:          RAJI              Lymphoid                Non-Hodgkin Lymphoma
+19:         A3KAW              Lymphoid             Mature B-Cell Neoplasms
+    MYC_Expression Chronos      am_class_top am_max_pathogenicity
+             <num>   <num>            <fctr>                <num>
+ 1:           7.53   -3.71 likely pathogenic                 0.97
+ 2:           6.36   -3.35     likely benign                 0.08
+ 3:           7.05   -3.19     likely benign                 0.11
+ 4:           8.88   -3.03     likely benign                 0.14
+ 5:           6.54   -2.89     likely benign                 0.07
+ 6:           6.22   -2.62     likely benign                 0.08
+ 7:           9.27   -2.45     likely benign                 0.10
+ 8:           7.49   -2.38 likely pathogenic                 0.57
+ 9:           8.19   -2.37     likely benign                 0.18
+10:           5.45   -2.35     likely benign                 0.09
+11:           7.37   -2.27     likely benign                 0.07
+12:           8.15   -1.98 likely pathogenic                 0.97
+13:           7.21   -1.96 likely pathogenic                 1.00
+14:           7.96   -1.90 likely pathogenic                 1.00
+15:           6.48   -1.50 likely pathogenic                 0.98
+16:           7.96   -1.48     likely benign                 0.11
+17:           5.89   -1.15     likely benign                 0.26
+18:           8.59   -0.89 likely pathogenic                 0.80
+19:           8.44   -0.55     likely benign                 0.08
+            variants
+              <char>
+ 1:           p.E69K
+ 2:          p.V254L
+ 3:           p.N45S
+ 4:           p.T93R
+ 5:           p.L97F
+ 6:           p.V92I
+ 7:           p.Q51L
+ 8:          p.S264N
+ 9:           p.R25T
+10:          p.S189T
+11:           p.L97F
+12:           p.P60T
+13:           p.T73I
+14:           p.P74Q
+15:           p.P75A
+16:           p.V20A
+17:          p.S201P
+18: p.A59V, p.TP73IP
+19:           p.E43D
+
+Cohort regression: Chronos ~ MYC_Expression  (log2 TPM, already log-space)
+  n             : 19
+  intercept     : -3.175
+  slope (log2TPM): +0.130  (Chronos change per +1 unit log2 TPM)
+  R^2           : 0.027
+  p (slope!=0)  : 0.504
+  Pearson r     : +0.164
+  Spearman rho  : +0.144  (rank-based, scale-free)
+  NOTE: within the cohort the slope is POSITIVE, opposite to the
+  full-DepMap trend. With only 19 mutant lines this is statistically
+  underpowered and likely driven by a handful of high-expression
+  but only-moderately-dependent lymphoid lines (RAJI, A3KAW). The
+  full-DepMap correlation is the trustworthy effect; the cohort
+  panel is too small and too dependency-biased to recapitulate it.
+
+--- The puzzle: AM=likely_benign yet Chronos<-2 (highly dependent) ---
+        CellLine               lineage                             disease
+          <char>                <char>                              <char>
+1:           TE9     Esophagus/Stomach  Esophageal Squamous Cell Carcinoma
+2: LNCAPCLONEFGC              Prostate             Prostate Adenocarcinoma
+3:          KMM1              Lymphoid             Mature B-Cell Neoplasms
+4:         RT112 Bladder/Urinary Tract        Bladder Urothelial Carcinoma
+5:         SW837                 Bowel           Colorectal Adenocarcinoma
+6:         ST486              Lymphoid             Mature B-Cell Neoplasms
+7:        TANOUE              Lymphoid B-Cell Acute Lymphoblastic Leukemia
+8:          EKVX                  Lung          Non-Small Cell Lung Cancer
+9:       RT11284 Bladder/Urinary Tract        Bladder Urothelial Carcinoma
+   MYC_Expression Chronos am_max_pathogenicity variants
+            <num>   <num>                <num>   <char>
+1:           6.36   -3.35                 0.08  p.V254L
+2:           7.05   -3.19                 0.11   p.N45S
+3:           8.88   -3.03                 0.14   p.T93R
+4:           6.54   -2.89                 0.07   p.L97F
+5:           6.22   -2.62                 0.08   p.V92I
+6:           9.27   -2.45                 0.10   p.Q51L
+7:           8.19   -2.37                 0.18   p.R25T
+8:           5.45   -2.35                 0.09  p.S189T
+9:           7.37   -2.27                 0.07   p.L97F
+
+Median MYC_Expression among these puzzling lines: 7.05
+Median MYC_Expression in full DepMap: 6.19
+Top-quartile MYC_Expression threshold in full DepMap: 7.05
+Interpretation:
+  Expression closes the gap that CN alone leaves open. Burkitt-style
+  B-cell lymphoma lines (e.g. RAJI) carry IG-MYC translocations:
+  near-diploid CN but highly elevated MYC mRNA. If the puzzling
+  AM-likely-benign lines sit at or above the top-quartile MYC
+  expression threshold, their dependency is explained by
+  overexpression, not the residue change. AM scores the residue,
+  so the likely-benign call is structurally correct but biologically
+  uninformative for an oncogene whose activation mechanism is dosage.

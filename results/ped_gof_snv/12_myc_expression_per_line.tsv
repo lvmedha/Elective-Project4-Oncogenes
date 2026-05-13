@@ -1,0 +1,20 @@
+ACH	variants	am_classes_raw	am_class_top	am_max_pathogenicity	Chronos	MYC_Expression	lineage	disease	CellLine
+ACH-000402	p.T73I	likely pathogenic	likely pathogenic	0.9954	-1.95713227338282	7.2147756	Lymphoid	Mature B-Cell Neoplasms	BL70
+ACH-000421	p.V92I	likely benign	likely benign	0.0762	-2.61975591938499	6.2183723	Bowel	Colorectal Adenocarcinoma	SW837
+ACH-000473	p.L97F	likely benign	likely benign	0.0677	-2.885903874294	6.5424776	Bladder/Urinary Tract	Bladder Urothelial Carcinoma	RT112
+ACH-000567	p.Q51L	likely benign	likely benign	0.1006	-2.44784110488494	9.269592	Lymphoid	Mature B-Cell Neoplasms	ST486
+ACH-000654	p.A59V, p.TP73IP	likely pathogenic, no AM score	likely pathogenic	0.7963	-0.886096819836305	8.589314	Lymphoid	Non-Hodgkin Lymphoma	RAJI
+ACH-000660	p.P75A	likely pathogenic	likely pathogenic	0.9752	-1.49991563787551	6.475534	Lymphoid	Mature B-Cell Neoplasms	SUDHL5
+ACH-000694	p.V254L	likely benign	likely benign	0.0762	-3.35111891309858	6.357624	Esophagus/Stomach	Esophageal Squamous Cell Carcinoma	TE9
+ACH-000697	p.E43D	likely benign	likely benign	0.0761	-0.549498092387497	8.444903	Lymphoid	Mature B-Cell Neoplasms	A3KAW
+ACH-000706	p.S189T	likely benign	likely benign	0.0858	-2.35019391395921	5.4472785	Lung	Non-Small Cell Lung Cancer	EKVX
+ACH-000841	p.E69K	likely pathogenic	likely pathogenic	0.9695	-3.7062968446939	7.527094	Lung	Non-Small Cell Lung Cancer	NCIH2087
+ACH-000889	p.T93R	likely benign	likely benign	0.1392	-3.02501115179047	8.883535	Lymphoid	Mature B-Cell Neoplasms	KMM1
+ACH-000944	p.V20A	likely benign	likely benign	0.1112	-1.48350987154545	7.9601007	Lymphoid	Mature B-Cell Neoplasms	NAMALWA
+ACH-000965	p.S201P	likely benign	likely benign	0.2558	-1.14628909358586	5.893852	Uterus	Endometrial Carcinoma	RL952
+ACH-000977	p.N45S	likely benign	likely benign	0.1146	-3.19015788353718	7.0473857	Prostate	Prostate Adenocarcinoma	LNCAPCLONEFGC
+ACH-001183	p.L97F	likely benign	likely benign	0.0677	-2.27444791347878	7.368192	Bladder/Urinary Tract	Bladder Urothelial Carcinoma	RT11284
+ACH-001656	p.P74Q	likely pathogenic	likely pathogenic	0.9987	-1.90342638741868	7.960529	Myeloid	Acute Myeloid Leukemia	SKNO1
+ACH-001669	p.R25T	likely benign	likely benign	0.1811	-2.37450519071181	8.186932	Lymphoid	B-Cell Acute Lymphoblastic Leukemia	TANOUE
+ACH-001685	p.S264N	likely pathogenic	likely pathogenic	0.5656	-2.38363165844841	7.493575	Lymphoid	Hodgkin Lymphoma	UHO1
+ACH-002709	p.P60T	likely pathogenic	likely pathogenic	0.9718	-1.98191041008349	8.151844	Myeloid	Acute Myeloid Leukemia	CMS
